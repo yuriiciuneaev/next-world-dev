@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import type { product } from '@commerce/types/product'
+import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 
 import { useState } from 'react'
@@ -65,7 +65,7 @@ const policies = [
   { name: 'Loyalty rewards', icon: CurrencyDollarIcon, description: "Don't look at other tees" },
 ]
 
-function classNames(...classes) {
+function classNames(...classes: any[]) {
   return classes.filter(Boolean).join(' ')
 }
 
