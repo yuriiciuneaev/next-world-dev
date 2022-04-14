@@ -7,6 +7,7 @@ import { useRouter } from 'next/router'
 import commerce from '@lib/api/commerce'
 import { Layout } from '@components/common'
 import { ProductView } from '@components/product'
+import MapEditor from '@components/product/MapEditor';
 
 export async function getStaticProps({
   params,
@@ -70,11 +71,12 @@ export default function Slug({
   relatedProducts,
 }: InferGetStaticPropsType<typeof getStaticProps>) {
   const router = useRouter()
+  const { slug } = router.query;
 
   return router.isFallback ? (
     <h1>Loading...</h1>
   ) : (
-    <ProductView product={product} relatedProducts={relatedProducts} />
+    slug === 'create-a-map' ? <MapEditor product={product} /> : <ProductView product={product} relatedProducts={relatedProducts} />
   )
 }
 
