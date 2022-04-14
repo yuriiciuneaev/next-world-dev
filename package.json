@@ -26,6 +26,9 @@
   "packageManager": "yarn@1.22.17",
   "dependencies": {
     "@headlessui/react": "^1.5.0",
-    "@heroicons/react": "^1.0.6"
+    "@heroicons/react": "^1.0.6",
+    "axios": "^0.26.1",
+    "leaflet": "^1.7.1",
+    "react-leaflet": "^3.2.5"
   }
 }

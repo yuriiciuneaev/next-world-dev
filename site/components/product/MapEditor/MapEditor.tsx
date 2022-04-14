@@ -2,14 +2,15 @@ import { FC } from 'react'
 import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 
-import { useState } from 'react'
+import dynamic from "next/dynamic";
+import { useState, useMemo } from 'react'
 import { StarIcon } from '@heroicons/react/solid'
 import { RadioGroup } from '@headlessui/react'
 import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
 
 const productData = {
-  name: 'Basic Tee',
-  price: '$35',
+  name: 'Custom City Framed Poster',
+  price: '$48',
   rating: 3.9,
   reviewCount: 512,
   href: '#',
@@ -80,6 +81,18 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
     baseAmount: product.price.retailPrice,
     currencyCode: product.price.currencyCode!,
   })
+
+  const MapView = useMemo(
+    () =>
+      dynamic(
+        () => import("./MapView"), // replace '@components/map' with your component's location
+        {
+          loading: () => <p>A map is loading</p>,
+          ssr: false, // This line is important. It's what prevents server-side render
+        }
+      ),
+    [] // state that should refresh the map
+  );
 
   const [selectedColor, setSelectedColor] = useState(productData.colors[0])
   const [selectedSize, setSelectedSize] = useState(productData.sizes[2])
@@ -157,7 +170,14 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
               <h2 className="sr-only">Images</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-                {productData.images.map((image) => (
+                <MapView
+                  title="New york"
+                  subtitle="Test"
+                  width="354.5px"
+                  height="443px"
+                  mapStyle="cl0howgz1000414mxx2vhk2jw"
+                />
+                {/* {productData.images.map((image) => (
                   <img
                     key={image.id}
                     src={image.imageSrc}
@@ -167,7 +187,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       'rounded-lg'
                     )}
                   />
-                ))}
+                ))} */}
               </div>
             </div>
 
@@ -175,7 +195,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
               <form>
                 {/* Color picker */}
                 <div>
-                  <h2 className="text-sm font-medium text-gray-900">Color</h2>
+                  <h2 className="text-sm font-medium text-gray-900">Map Style</h2>
 
                   <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
                     <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
@@ -216,6 +236,37 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
                       See sizing chart
                     </a>
+                  </div>
+
+                  <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
+                    <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                      {productData.sizes.map((size) => (
+                        <RadioGroup.Option
+                          key={size.name}
+                          value={size}
+                          className={({ active, checked }) =>
+                            classNames(
+                              size.inStock ? 'cursor-pointer focus:outline-none' : 'opacity-25 cursor-not-allowed',
+                              active ? 'ring-2 ring-offset-2 ring-indigo-500' : '',
+                              checked
+                                ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
+                                : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
+                              'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1'
+                            )
+                          }
+                          disabled={!size.inStock}
+                        >
+                          <RadioGroup.Label as="p">{size.name}</RadioGroup.Label>
+                        </RadioGroup.Option>
+                      ))}
+                    </div>
+                  </RadioGroup>
+                </div>
+
+                <div className="mt-8">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-sm font-medium text-gray-900">Frame</h2>
                   </div>
 
                   <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
