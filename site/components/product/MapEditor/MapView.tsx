@@ -11,16 +11,21 @@ import {
 import 'leaflet/dist/leaflet.css'
 import { getLocation } from './get-location.hook'
 
-
 interface MapViewProps {
-  title: string,
-  subtitle: string,
-  width: string,
-  height: string,
-  mapStyle: string, // cl0howgz1000414mxx2vhk2jw
+  title: string
+  subtitle: string
+  width: string
+  height: string
+  mapStyle: string // cl0howgz1000414mxx2vhk2jw
 }
 
-const MapView: FC<MapViewProps> = ({ title, subtitle, width, height, mapStyle }) => {
+const MapView: FC<MapViewProps> = ({
+  title,
+  subtitle,
+  width,
+  height,
+  mapStyle,
+}) => {
   const { position } = getLocation()
 
   return (

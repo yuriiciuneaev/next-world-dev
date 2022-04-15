@@ -211,9 +211,20 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
             <div className="mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
               <h2 className="sr-only">Images</h2>
 
-              <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-                <div className="relative">
-                  <img
+              <div>
+                <div className="art-collection m-5">
+                  <div className="art-frame">
+                  <MapView
+                    title="New york"
+                    subtitle="Test"
+                    width="354.5px"
+                    height="443px"
+                    mapStyle="cl0howgz1000414mxx2vhk2jw"
+                  />
+                  </div>
+                </div>
+                {/* <div className="relative"> */}
+                {/* <img
                     className="absolute"
                     style={{
                       width: '500px',
@@ -222,15 +233,15 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       maxWidth: 'none',
                     }}
                     src="https://www.ikea.com/us/en/images/products/ribba-frame-black__0638340_pe698864_s5.jpg"
-                  />
-                  <MapView
+                  /> */}
+                {/* <MapView
                     title="New york"
                     subtitle="Test"
                     width="354.5px"
                     height="443px"
                     mapStyle="cl0howgz1000414mxx2vhk2jw"
-                  />
-                </div>
+                  /> */}
+                {/* </div> */}
                 {/* {productData.images.map((image) => (
                   <img
                     key={image.id}
@@ -247,7 +258,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
             <div className="mt-8 lg:col-span-5">
               <form>
-                <div className="mb-7">
+                <div className="mb-7yar">
                   <h2 className="text-sm font-medium text-gray-900">Title</h2>
                   <input
                     type="text"
@@ -259,7 +270,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   />
                 </div>
                 <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">Subtitle</h2>
+                  <h2 className="text-sm font-medium text-gray-900">
+                    Subtitle
+                  </h2>
                   <input
                     type="text"
                     name="username"
