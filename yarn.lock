@@ -1343,6 +1343,13 @@
   dependencies:
     "defer-to-connect" "^1.0.1"
 
+"@tailwindcss/forms@^0.5.0":
+  "integrity" "sha512-KzWugryEBFkmoaYcBE18rs6gthWCFHHO7cAZm2/hv3hwD67AzwP7udSCa22E7R1+CEJL/FfhYsJWrc0b1aeSzw=="
+  "resolved" "https://registry.npmjs.org/@tailwindcss/forms/-/forms-0.5.0.tgz"
+  "version" "0.5.0"
+  dependencies:
+    "mini-svg-data-uri" "^1.2.3"
+
 "@taskr/clear@^1.1.0":
   "integrity" "sha1-CojRgL7S+R8xATY3WnLAC1CDT9E="
   "resolved" "https://registry.npmjs.org/@taskr/clear/-/clear-1.1.0.tgz"
@@ -5073,6 +5080,11 @@
   "resolved" "https://registry.npmjs.org/mimic-response/-/mimic-response-1.0.1.tgz"
   "version" "1.0.1"
 
+"mini-svg-data-uri@^1.2.3":
+  "integrity" "sha512-r9deDe9p5FJUPZAk3A59wGH7Ii9YrjjWw0jmw/liSbHl2CHiyXj6FcDXDu2K3TjVAXqiJdaw3xxwlZZr9E6nHg=="
+  "resolved" "https://registry.npmjs.org/mini-svg-data-uri/-/mini-svg-data-uri-1.4.4.tgz"
+  "version" "1.4.4"
+
 "minimatch@^3.0.4", "minimatch@3.0.4":
   "integrity" "sha512-yJHVQEhyqPLUTgt9B83PXu6W3rx4MvvHvSUvToogpwoGDOUQ+yDrR0HRot+yOCdCO7u4hX3pWft6kWBBcqh0UA=="
   "resolved" "https://registry.npmjs.org/minimatch/-/minimatch-3.0.4.tgz"
@@ -6962,7 +6974,7 @@
   "resolved" "https://registry.npmjs.org/tabbable/-/tabbable-5.2.1.tgz"
   "version" "5.2.1"
 
-"tailwindcss@^3.0.13":
+"tailwindcss@^3.0.13", "tailwindcss@>=3.0.0 || >= 3.0.0-alpha.1":
   "integrity" "sha512-1L8E5Wr+o1c4kxxObNz2owJe94a7BLEMV+2Lz6wzprJdcs3ENSRR9t4OZf2OqtRNS/q/zFPuOKoLtQoy3Lrhhw=="
   "resolved" "https://registry.npmjs.org/tailwindcss/-/tailwindcss-3.0.16.tgz"
   "version" "3.0.16"

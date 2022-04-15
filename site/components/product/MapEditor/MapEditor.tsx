@@ -2,11 +2,13 @@ import { FC } from 'react'
 import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 
-import dynamic from "next/dynamic";
+import dynamic from 'next/dynamic'
 import { useState, useMemo } from 'react'
 import { StarIcon } from '@heroicons/react/solid'
 import { RadioGroup } from '@headlessui/react'
 import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
+
+import Input from '@components/ui/Input'
 
 const productData = {
   name: 'Custom City Framed Poster',
@@ -21,26 +23,33 @@ const productData = {
   images: [
     {
       id: 1,
-      imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-featured-product-shot.jpg',
+      imageSrc:
+        'https://tailwindui.com/img/ecommerce-images/product-page-01-featured-product-shot.jpg',
       imageAlt: "Back of women's Basic Tee in black.",
       primary: true,
     },
     {
       id: 2,
-      imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-product-shot-01.jpg',
+      imageSrc:
+        'https://tailwindui.com/img/ecommerce-images/product-page-01-product-shot-01.jpg',
       imageAlt: "Side profile of women's Basic Tee in black.",
       primary: false,
     },
     {
       id: 3,
-      imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-01-product-shot-02.jpg',
+      imageSrc:
+        'https://tailwindui.com/img/ecommerce-images/product-page-01-product-shot-02.jpg',
       imageAlt: "Front of women's Basic Tee in black.",
       primary: false,
     },
   ],
   colors: [
     { name: 'Black', bgColor: 'bg-gray-900', selectedColor: 'ring-gray-900' },
-    { name: 'Heather Grey', bgColor: 'bg-gray-400', selectedColor: 'ring-gray-400' },
+    {
+      name: 'Heather Grey',
+      bgColor: 'bg-gray-400',
+      selectedColor: 'ring-gray-400',
+    },
   ],
   sizes: [
     { name: 'XXS', inStock: true },
@@ -62,8 +71,16 @@ const productData = {
   ],
 }
 const policies = [
-  { name: 'International delivery', icon: GlobeIcon, description: 'Get your order in 2 years' },
-  { name: 'Loyalty rewards', icon: CurrencyDollarIcon, description: "Don't look at other tees" },
+  {
+    name: 'International delivery',
+    icon: GlobeIcon,
+    description: 'Get your order in 2 years',
+  },
+  {
+    name: 'Loyalty rewards',
+    icon: CurrencyDollarIcon,
+    description: "Don't look at other tees",
+  },
 ]
 
 function classNames(...classes: any[]) {
@@ -85,14 +102,14 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
   const MapView = useMemo(
     () =>
       dynamic(
-        () => import("./MapView"), // replace '@components/map' with your component's location
+        () => import('./MapView'), // replace '@components/map' with your component's location
         {
           loading: () => <p>A map is loading</p>,
           ssr: false, // This line is important. It's what prevents server-side render
         }
       ),
     [] // state that should refresh the map
-  );
+  )
 
   const [selectedColor, setSelectedColor] = useState(productData.colors[0])
   const [selectedSize, setSelectedSize] = useState(productData.sizes[2])
@@ -100,12 +117,18 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
   return (
     <div className="bg-white">
       <div className="pt-6 pb-16 sm:pb-24">
-        <nav aria-label="Breadcrumb" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <nav
+          aria-label="Breadcrumb"
+          className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+        >
           <ol role="list" className="flex items-center space-x-4">
             {productData.breadcrumbs.map((breadcrumb) => (
               <li key={breadcrumb.id}>
                 <div className="flex items-center">
-                  <a href={breadcrumb.href} className="mr-4 text-sm font-medium text-gray-900">
+                  <a
+                    href={breadcrumb.href}
+                    className="mr-4 text-sm font-medium text-gray-900"
+                  >
                     {breadcrumb.name}
                   </a>
                   <svg
@@ -114,13 +137,20 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     aria-hidden="true"
                     className="h-5 w-auto text-gray-300"
                   >
-                    <path d="M4.878 4.34H3.551L.27 16.532h1.327l3.281-12.19z" fill="currentColor" />
+                    <path
+                      d="M4.878 4.34H3.551L.27 16.532h1.327l3.281-12.19z"
+                      fill="currentColor"
+                    />
                   </svg>
                 </div>
               </li>
             ))}
             <li className="text-sm">
-              <a href={productData.href} aria-current="page" className="font-medium text-gray-500 hover:text-gray-600">
+              <a
+                href={productData.href}
+                aria-current="page"
+                className="font-medium text-gray-500 hover:text-gray-600"
+              >
                 {productData.name}
               </a>
             </li>
@@ -130,8 +160,12 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
           <div className="lg:grid lg:grid-cols-12 lg:auto-rows-min lg:gap-x-8">
             <div className="lg:col-start-8 lg:col-span-5">
               <div className="flex justify-between">
-                <h1 className="text-xl font-medium text-gray-900">{productData.name}</h1>
-                <p className="text-xl font-medium text-gray-900">{productData.price}</p>
+                <h1 className="text-xl font-medium text-gray-900">
+                  {productData.name}
+                </h1>
+                <p className="text-xl font-medium text-gray-900">
+                  {productData.price}
+                </p>
               </div>
               {/* Reviews */}
               <div className="mt-4">
@@ -146,18 +180,26 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       <StarIcon
                         key={rating}
                         className={classNames(
-                          productData.rating > rating ? 'text-yellow-400' : 'text-gray-200',
+                          productData.rating > rating
+                            ? 'text-yellow-400'
+                            : 'text-gray-200',
                           'h-5 w-5 flex-shrink-0'
                         )}
                         aria-hidden="true"
                       />
                     ))}
                   </div>
-                  <div aria-hidden="true" className="ml-4 text-sm text-gray-300">
+                  <div
+                    aria-hidden="true"
+                    className="ml-4 text-sm text-gray-300"
+                  >
                     ·
                   </div>
                   <div className="ml-4 flex">
-                    <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    <a
+                      href="#"
+                      className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
                       See all {productData.reviewCount} reviews
                     </a>
                   </div>
@@ -170,13 +212,25 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
               <h2 className="sr-only">Images</h2>
 
               <div className="grid grid-cols-1 lg:grid-cols-2 lg:grid-rows-3 lg:gap-8">
-                <MapView
-                  title="New york"
-                  subtitle="Test"
-                  width="354.5px"
-                  height="443px"
-                  mapStyle="cl0howgz1000414mxx2vhk2jw"
-                />
+                <div className="relative">
+                  <img
+                    className="absolute"
+                    style={{
+                      width: '500px',
+                      left: '-80px',
+                      top: '-30px',
+                      maxWidth: 'none',
+                    }}
+                    src="https://www.ikea.com/us/en/images/products/ribba-frame-black__0638340_pe698864_s5.jpg"
+                  />
+                  <MapView
+                    title="New york"
+                    subtitle="Test"
+                    width="354.5px"
+                    height="443px"
+                    mapStyle="cl0howgz1000414mxx2vhk2jw"
+                  />
+                </div>
                 {/* {productData.images.map((image) => (
                   <img
                     key={image.id}
@@ -193,12 +247,42 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
             <div className="mt-8 lg:col-span-5">
               <form>
+                <div className="mb-7">
+                  <h2 className="text-sm font-medium text-gray-900">Title</h2>
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    autoComplete="username"
+                    className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                    // defaultValue={user.handle}
+                  />
+                </div>
+                <div className="my-7">
+                  <h2 className="text-sm font-medium text-gray-900">Subtitle</h2>
+                  <input
+                    type="text"
+                    name="username"
+                    id="username"
+                    autoComplete="username"
+                    className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                    // defaultValue={user.handle}
+                  />
+                </div>
                 {/* Color picker */}
-                <div>
-                  <h2 className="text-sm font-medium text-gray-900">Map Style</h2>
+                <div className="my-7">
+                  <h2 className="text-sm font-medium text-gray-900">
+                    Map Style
+                  </h2>
 
-                  <RadioGroup value={selectedColor} onChange={setSelectedColor} className="mt-2">
-                    <RadioGroup.Label className="sr-only">Choose a color</RadioGroup.Label>
+                  <RadioGroup
+                    value={selectedColor}
+                    onChange={setSelectedColor}
+                    className="mt-2"
+                  >
+                    <RadioGroup.Label className="sr-only">
+                      Choose a color
+                    </RadioGroup.Label>
                     <div className="flex items-center space-x-3">
                       {productData.colors.map((color) => (
                         <RadioGroup.Option
@@ -233,13 +317,22 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                 <div className="mt-8">
                   <div className="flex items-center justify-between">
                     <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                    <a href="#" className="text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                    <a
+                      href="#"
+                      className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
+                    >
                       See sizing chart
                     </a>
                   </div>
 
-                  <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
-                    <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                  <RadioGroup
+                    value={selectedSize}
+                    onChange={setSelectedSize}
+                    className="mt-2"
+                  >
+                    <RadioGroup.Label className="sr-only">
+                      Choose a size
+                    </RadioGroup.Label>
                     <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
                       {productData.sizes.map((size) => (
                         <RadioGroup.Option
@@ -247,8 +340,12 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                           value={size}
                           className={({ active, checked }) =>
                             classNames(
-                              size.inStock ? 'cursor-pointer focus:outline-none' : 'opacity-25 cursor-not-allowed',
-                              active ? 'ring-2 ring-offset-2 ring-indigo-500' : '',
+                              size.inStock
+                                ? 'cursor-pointer focus:outline-none'
+                                : 'opacity-25 cursor-not-allowed',
+                              active
+                                ? 'ring-2 ring-offset-2 ring-indigo-500'
+                                : '',
                               checked
                                 ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
                                 : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
@@ -257,7 +354,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                           }
                           disabled={!size.inStock}
                         >
-                          <RadioGroup.Label as="p">{size.name}</RadioGroup.Label>
+                          <RadioGroup.Label as="p">
+                            {size.name}
+                          </RadioGroup.Label>
                         </RadioGroup.Option>
                       ))}
                     </div>
@@ -269,8 +368,14 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     <h2 className="text-sm font-medium text-gray-900">Frame</h2>
                   </div>
 
-                  <RadioGroup value={selectedSize} onChange={setSelectedSize} className="mt-2">
-                    <RadioGroup.Label className="sr-only">Choose a size</RadioGroup.Label>
+                  <RadioGroup
+                    value={selectedSize}
+                    onChange={setSelectedSize}
+                    className="mt-2"
+                  >
+                    <RadioGroup.Label className="sr-only">
+                      Choose a size
+                    </RadioGroup.Label>
                     <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
                       {productData.sizes.map((size) => (
                         <RadioGroup.Option
@@ -278,8 +383,12 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                           value={size}
                           className={({ active, checked }) =>
                             classNames(
-                              size.inStock ? 'cursor-pointer focus:outline-none' : 'opacity-25 cursor-not-allowed',
-                              active ? 'ring-2 ring-offset-2 ring-indigo-500' : '',
+                              size.inStock
+                                ? 'cursor-pointer focus:outline-none'
+                                : 'opacity-25 cursor-not-allowed',
+                              active
+                                ? 'ring-2 ring-offset-2 ring-indigo-500'
+                                : '',
                               checked
                                 ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
                                 : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
@@ -288,7 +397,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                           }
                           disabled={!size.inStock}
                         >
-                          <RadioGroup.Label as="p">{size.name}</RadioGroup.Label>
+                          <RadioGroup.Label as="p">
+                            {size.name}
+                          </RadioGroup.Label>
                         </RadioGroup.Option>
                       ))}
                     </div>
@@ -305,7 +416,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
               {/* productData details */}
               <div className="mt-10">
-                <h2 className="text-sm font-medium text-gray-900">Description</h2>
+                <h2 className="text-sm font-medium text-gray-900">
+                  Description
+                </h2>
 
                 <div
                   className="mt-4 prose prose-sm text-gray-500"
@@ -314,7 +427,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
               </div>
 
               <div className="mt-8 border-t border-gray-200 pt-8">
-                <h2 className="text-sm font-medium text-gray-900">Fabric &amp; Care</h2>
+                <h2 className="text-sm font-medium text-gray-900">
+                  Fabric &amp; Care
+                </h2>
 
                 <div className="mt-4 prose prose-sm text-gray-500">
                   <ul role="list">
@@ -333,12 +448,22 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
                 <dl className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
                   {policies.map((policy) => (
-                    <div key={policy.name} className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center">
+                    <div
+                      key={policy.name}
+                      className="bg-gray-50 border border-gray-200 rounded-lg p-6 text-center"
+                    >
                       <dt>
-                        <policy.icon className="mx-auto h-6 w-6 flex-shrink-0 text-gray-400" aria-hidden="true" />
-                        <span className="mt-4 text-sm font-medium text-gray-900">{policy.name}</span>
+                        <policy.icon
+                          className="mx-auto h-6 w-6 flex-shrink-0 text-gray-400"
+                          aria-hidden="true"
+                        />
+                        <span className="mt-4 text-sm font-medium text-gray-900">
+                          {policy.name}
+                        </span>
                       </dt>
-                      <dd className="mt-1 text-sm text-gray-500">{policy.description}</dd>
+                      <dd className="mt-1 text-sm text-gray-500">
+                        {policy.description}
+                      </dd>
                     </div>
                   ))}
                 </dl>
@@ -348,7 +473,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default MapEditor;
+export default MapEditor
