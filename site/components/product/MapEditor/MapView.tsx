@@ -17,6 +17,8 @@ interface MapViewProps {
   width: string
   height: string
   mapStyle: string // cl0howgz1000414mxx2vhk2jw
+  lat: number
+  lng: number
 }
 
 const MapView: FC<MapViewProps> = ({
@@ -25,6 +27,8 @@ const MapView: FC<MapViewProps> = ({
   width,
   height,
   mapStyle,
+  lat,
+  lng
 }) => {
   const { position } = getLocation()
 
@@ -32,7 +36,7 @@ const MapView: FC<MapViewProps> = ({
     <>
       <MapContainer
         zoom={13}
-        center={position}
+        center={[lat,lng]}
         scrollWheelZoom={false}
         style={{
           height,

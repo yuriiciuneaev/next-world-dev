@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 
@@ -9,6 +9,8 @@ import { RadioGroup } from '@headlessui/react'
 import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
 
 import Input from '@components/ui/Input'
+import GetLocationButton from './GetLocationButton';
+import ComboBox from './ComboBox'
 
 const productData = {
   name: 'Custom City Framed Poster',
@@ -93,11 +95,9 @@ interface MapEditorProps {
 }
 
 const MapEditor: FC<MapEditorProps> = ({ product }) => {
-  const { price } = usePrice({
-    amount: product.price.value,
-    baseAmount: product.price.retailPrice,
-    currencyCode: product.price.currencyCode!,
-  })
+  const [lat, setLat] = useState(0)
+  const [lng, setLng] = useState(0)
+  const [status, setStatus] = useState('')
 
   const MapView = useMemo(
     () =>
@@ -108,11 +108,40 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
           ssr: false, // This line is important. It's what prevents server-side render
         }
       ),
-    [] // state that should refresh the map
+    [lat] // state that should refresh the map
   )
+
+  const getUserLocation = () => {
+    if (!navigator.geolocation) {
+      setStatus('Geolocation is not supported by your browser')
+    } else {
+      setStatus('Locating...')
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          debugger;
+          setStatus('')
+          setLat(position.coords.latitude)
+          setLng(position.coords.longitude)
+        },
+        () => {
+          setStatus('Unable to retrieve your location')
+        }
+      )
+    }
+  }
+
+  useEffect(() => {
+    getUserLocation();
+  }, [])
 
   const [selectedColor, setSelectedColor] = useState(productData.colors[0])
   const [selectedSize, setSelectedSize] = useState(productData.sizes[2])
+
+  const { price } = usePrice({
+    amount: product.price.value,
+    baseAmount: product.price.retailPrice,
+    currencyCode: product.price.currencyCode!,
+  })
 
   return (
     <div className="bg-white">
@@ -219,7 +248,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     subtitle="Test"
                     width="354.5px"
                     height="443px"
-                    mapStyle="cl0howgz1000414mxx2vhk2jw"
+                    lng={lng}
+                    lat={lat}
+                    mapStyle="cjria9ya35nzu2smgxatsz5fp"
                   />
                   </div>
                 </div>
@@ -256,9 +287,21 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
               </div>
             </div>
 
-            <div className="mt-8 lg:col-span-5">
+            <div className="product-sidebar mt-8 lg:col-span-5">
               <form>
-                <div className="mb-7yar">
+                <div className="product-sidebar__heading">
+                  <h2 className="text-lg font-bold text-gray-900">Location</h2>
+                  <p className="text-gray-400">Find your favorite place and move around the map until you find the exact area you want to print.</p>
+                </div>
+                <div className="my-7">
+                  <h2 className="text-sm font-medium text-gray-900">Location</h2>
+                  <GetLocationButton getUserLocation={getUserLocation} />
+                </div>
+                <div className="product-sidebar__heading">
+                  <h2 className="text-lg font-bold text-gray-900">Text</h2>
+                  <p className="text-gray-400">Customize the print with your own text</p>
+                </div>
+                <div className="my-7">
                   <h2 className="text-sm font-medium text-gray-900">Title</h2>
                   <input
                     type="text"
@@ -281,6 +324,10 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
                     // defaultValue={user.handle}
                   />
+                </div>
+                <div className="product-sidebar__heading">
+                  <h2 className="text-lg font-bold text-gray-900">Style</h2>
+                  <p className="text-gray-400">Change the color of the map and add finishing touches</p>
                 </div>
                 {/* Color picker */}
                 <div className="my-7">
@@ -324,6 +371,13 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       ))}
                     </div>
                   </RadioGroup>
+                </div>
+
+                <div className="mt-8">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-sm font-medium text-gray-900">Size</h2>
+                  </div>
+                  <ComboBox />
                 </div>
 
                 {/* Size picker */}
