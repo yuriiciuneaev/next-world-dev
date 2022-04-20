@@ -8,8 +8,10 @@ import { StarIcon } from '@heroicons/react/solid'
 import { RadioGroup } from '@headlessui/react'
 import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
 
+import AutoComplete from 'react-google-autocomplete';
+
 import Input from '@components/ui/Input'
-import GetLocationButton from './GetLocationButton';
+import GetLocationButton from './GetLocationButton'
 import ComboBox from './ComboBox'
 
 const productData = {
@@ -118,7 +120,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
       setStatus('Locating...')
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          debugger;
+          debugger
           setStatus('')
           setLat(position.coords.latitude)
           setLng(position.coords.longitude)
@@ -131,7 +133,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
   }
 
   useEffect(() => {
-    getUserLocation();
+    getUserLocation()
   }, [])
 
   const [selectedColor, setSelectedColor] = useState(productData.colors[0])
@@ -243,15 +245,15 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
               <div>
                 <div className="art-collection m-5">
                   <div className="art-frame">
-                  <MapView
-                    title="New york"
-                    subtitle="Test"
-                    width="354.5px"
-                    height="443px"
-                    lng={lng}
-                    lat={lat}
-                    mapStyle="cjria9ya35nzu2smgxatsz5fp"
-                  />
+                    <MapView
+                      title="New york"
+                      subtitle="Test"
+                      width="354.5px"
+                      height="443px"
+                      lng={lng}
+                      lat={lat}
+                      mapStyle="cjria9ya35nzu2smgxatsz5fp"
+                    />
                   </div>
                 </div>
                 {/* <div className="relative"> */}
@@ -291,15 +293,32 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
               <form>
                 <div className="product-sidebar__heading">
                   <h2 className="text-lg font-bold text-gray-900">Location</h2>
-                  <p className="text-gray-400">Find your favorite place and move around the map until you find the exact area you want to print.</p>
+                  <p className="text-gray-400">
+                    Find your favorite place and move around the map until you
+                    find the exact area you want to print.
+                  </p>
                 </div>
                 <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">Location</h2>
-                  <GetLocationButton getUserLocation={getUserLocation} />
+                  <h2 className="text-sm font-medium text-gray-900">
+                    Location
+                  </h2>
+                  <AutoComplete
+                    apiKey={'AIzaSyDUc5Y4hdG1FvoJVP7aNhSni4rIoLd_ca0'}
+                    onPlaceSelected={(place: any) => {
+                      const lat = place.geometry.location.lat()
+                      const lng = place.geometry.location.lng();
+
+                      setLng(lng);
+                      setLat(lat);
+                    }}
+                  />
+                  {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
                 </div>
                 <div className="product-sidebar__heading">
                   <h2 className="text-lg font-bold text-gray-900">Text</h2>
-                  <p className="text-gray-400">Customize the print with your own text</p>
+                  <p className="text-gray-400">
+                    Customize the print with your own text
+                  </p>
                 </div>
                 <div className="my-7">
                   <h2 className="text-sm font-medium text-gray-900">Title</h2>
@@ -327,7 +346,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                 </div>
                 <div className="product-sidebar__heading">
                   <h2 className="text-lg font-bold text-gray-900">Style</h2>
-                  <p className="text-gray-400">Change the color of the map and add finishing touches</p>
+                  <p className="text-gray-400">
+                    Change the color of the map and add finishing touches
+                  </p>
                 </div>
                 {/* Color picker */}
                 <div className="my-7">
