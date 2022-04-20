@@ -66,13 +66,13 @@ const MapView: FC<MapViewProps> = ({
               style={{ fontFamily: 'Abril Fatface' }}
               className="text-black text-4xl font-bold"
             >
-              Title
+              {title}
             </h1>
             <span
               style={{ fontFamily: 'Abril Fatface' }}
               className="text-black text-xl"
             >
-              Subtitle
+              {subtitle}
             </span>
           </div>
         </div>

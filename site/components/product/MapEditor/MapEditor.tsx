@@ -99,6 +99,8 @@ interface MapEditorProps {
 const MapEditor: FC<MapEditorProps> = ({ product }) => {
   const [lat, setLat] = useState(0)
   const [lng, setLng] = useState(0)
+  const [title, setTitle] = useState('New York');
+  const [subtitle, setSubtitle] = useState('United States');
   const [status, setStatus] = useState('')
 
   const MapView = useMemo(
@@ -246,8 +248,8 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                 <div className="art-collection m-5">
                   <div className="art-frame">
                     <MapView
-                      title="New york"
-                      subtitle="Test"
+                      title={title}
+                      subtitle={subtitle}
                       width="354.5px"
                       height="443px"
                       lng={lng}
@@ -307,9 +309,13 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     onPlaceSelected={(place: any) => {
                       const lat = place.geometry.location.lat()
                       const lng = place.geometry.location.lng();
+                      const title = place.address_components[0].long_name;
+                      const subtitle = place.address_components[place.address_components.length - 1].long_name
 
+                      setTitle(title);
+                      setSubtitle(subtitle)
                       setLng(lng);
-                      setLat(lat);
+                      setLat(lat);;
                     }}
                   />
                   {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
