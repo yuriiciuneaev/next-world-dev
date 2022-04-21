@@ -9,7 +9,7 @@ import {
   Circle,
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import { getLocation } from './get-location.hook'
+import { getLocation } from './use-location.hook'
 
 interface MapViewProps {
   title: string
