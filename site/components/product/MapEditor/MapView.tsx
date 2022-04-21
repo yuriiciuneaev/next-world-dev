@@ -9,7 +9,7 @@ import {
   Circle,
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
-import { getLocation } from './use-location.hook'
+import useLocation from './use-location.hook'
 
 interface MapViewProps {
   title: string
@@ -30,7 +30,7 @@ const MapView: FC<MapViewProps> = ({
   lat,
   lng
 }) => {
-  const { position } = getLocation()
+  const { position } = useLocation()
 
   return (
     <>

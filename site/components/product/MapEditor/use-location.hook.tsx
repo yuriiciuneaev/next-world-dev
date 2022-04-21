@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-export const getLocation = () => {
+const useLocation = () => {
   const [position, setPosition] = useState({
     lat: 47.21725,
     lng: -1.55336,
@@ -29,3 +29,5 @@ export const getLocation = () => {
   }, []);
   return { position };
 };
+
+export default useLocation
