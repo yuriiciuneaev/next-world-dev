@@ -12,7 +12,6 @@ import AutoComplete from 'react-google-autocomplete';
 
 import Input from '@components/ui/Input'
 import GetLocationButton from './GetLocationButton'
-import ComboBox from './ComboBox'
 
 const productData = {
   name: 'Custom City Framed Poster',
@@ -448,7 +447,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   <div className="flex items-center justify-between">
                     <h2 className="text-sm font-medium text-gray-900">Size</h2>
                   </div>
-                  <ComboBox />
+
                 </div>
 
                 {/* Size picker */}
