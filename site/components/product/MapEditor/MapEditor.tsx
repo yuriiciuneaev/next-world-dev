@@ -48,11 +48,20 @@ const productData = {
     },
   ],
   colors: [
-    { name: 'Black', bgColor: 'bg-gray-900', selectedColor: 'ring-gray-900' },
+    { name: 'Black', bgColor: 'bg-gray-900', selectedColor: 'ring-gray-400', mapStyle: 'cl0howgz1000414mxx2vhk2jw', mapPreview: 'map-style-blue.png' },
     {
       name: 'Heather Grey',
       bgColor: 'bg-gray-400',
       selectedColor: 'ring-gray-400',
+      mapStyle: 'cjria9ya35nzu2smgxatsz5fp',
+      mapPreview: 'map-style-black.png'
+    },
+    {
+      name: 'Heather Pink',
+      bgColor: 'bg-gray-400',
+      selectedColor: 'ring-gray-400',
+      mapStyle: 'cl28ypih6000215kuhwwmdvmc',
+      mapPreview: 'map-style-pink.png'
     },
   ],
   sizes: [
@@ -74,6 +83,35 @@ const productData = {
     'Machine wash cold with similar colors',
   ],
 }
+
+
+{productData.colors.map((color) => (
+  <RadioGroup.Option
+    key={color.name}
+    value={color}
+    className={({ active, checked }) =>
+      classNames(
+        color.selectedColor,
+        active && checked ? 'ring ring-offset-1' : '',
+        !active && checked ? 'ring-2' : '',
+        '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
+      )
+    }
+  >
+    <RadioGroup.Label as="p" className="sr-only">
+      {color.name}
+    </RadioGroup.Label>
+    <span
+      aria-hidden="true"
+      className={classNames(
+        color.bgColor,
+        'h-8 w-8 border border-black border-opacity-10 rounded-full'
+      )}
+    />
+  </RadioGroup.Option>
+))}
+
+
 const policies = [
   {
     name: 'International delivery',
@@ -102,6 +140,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
   const [title, setTitle] = useState('New York');
   const [subtitle, setSubtitle] = useState('United States');
   const [status, setStatus] = useState('')
+  const [mapStyle, setMapStyle] = useState('cjria9ya35nzu2smgxatsz5fp');
 
   const MapView = useMemo(
     () =>
@@ -112,7 +151,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
           ssr: false, // This line is important. It's what prevents server-side render
         }
       ),
-    [lat] // state that should refresh the map
+    [lat, mapStyle] // state that should refresh the map
   )
 
   const getUserLocation = () => {
@@ -254,7 +293,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       height="443px"
                       lng={lng}
                       lat={lat}
-                      mapStyle="cjria9ya35nzu2smgxatsz5fp"
+                      mapStyle={mapStyle}
                     />
                   </div>
                 </div>
@@ -305,6 +344,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     Location
                   </h2>
                   <AutoComplete
+                    // className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                    // style={{ background: 'red' }}
+                    className="w-full p-2 border-2 border-gray-300 rounded-none rounded-r-md"
                     apiKey={'AIzaSyDUc5Y4hdG1FvoJVP7aNhSni4rIoLd_ca0'}
                     onPlaceSelected={(place: any) => {
                       const lat = place.geometry.location.lat()
@@ -330,11 +372,10 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   <h2 className="text-sm font-medium text-gray-900">Title</h2>
                   <input
                     type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
+                    name="title"
                     className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    // defaultValue={user.handle}
+                    onChange={(ev) => setTitle(ev.target.value)}
+                    defaultValue={title}
                   />
                 </div>
                 <div className="my-7">
@@ -343,15 +384,15 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   </h2>
                   <input
                     type="text"
-                    name="username"
-                    id="username"
-                    autoComplete="username"
+                    name="subtitle"
+                    id="subtitle"
                     className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    // defaultValue={user.handle}
+                    onChange={(ev) => setSubtitle(ev.target.value)}
+                    defaultValue={subtitle}
                   />
                 </div>
                 <div className="product-sidebar__heading">
-                  <h2 className="text-lg font-bold text-gray-900">Style</h2>
+                  <h2 className="text-lg font-bold text-gray-900">Map Style</h2>
                   <p className="text-gray-400">
                     Change the color of the map and add finishing touches
                   </p>
@@ -364,7 +405,10 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
                   <RadioGroup
                     value={selectedColor}
-                    onChange={setSelectedColor}
+                    onChange={(selected) => {
+                      setMapStyle(selected.mapStyle);
+                      setSelectedColor(selected)
+                    }}
                     className="mt-2"
                   >
                     <RadioGroup.Label className="sr-only">
@@ -389,9 +433,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                           </RadioGroup.Label>
                           <span
                             aria-hidden="true"
+                            style={{ background: `url("/assets/${color.mapPreview}")` }}
                             className={classNames(
-                              color.bgColor,
-                              'h-8 w-8 border border-black border-opacity-10 rounded-full'
+                              'h-10 w-10 border border-black border-opacity-10 rounded-full'
                             )}
                           />
                         </RadioGroup.Option>

@@ -49,7 +49,7 @@ const MapView: FC<MapViewProps> = ({
         attributionControl={false}
       >
         <TileLayer
-          url={`https://api.mapbox.com/styles/v1/jbedo/cl0howgz1000414mxx2vhk2jw/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamJlZG8iLCJhIjoiY2lrYm50dWR4MG03cHZqa3BycXE1dmw4dyJ9.v6Mp7vCiYGVe49UFjooYtQ`}
+          url={`https://api.mapbox.com/styles/v1/jbedo/${mapStyle}/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiamJlZG8iLCJhIjoiY2lrYm50dWR4MG03cHZqa3BycXE1dmw4dyJ9.v6Mp7vCiYGVe49UFjooYtQ`}
         />
         <div
           style={{ zIndex: 999 }}
