@@ -160,7 +160,6 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
       setStatus('Locating...')
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          debugger
           setStatus('')
           setLat(position.coords.latitude)
           setLng(position.coords.longitude)
@@ -171,10 +170,6 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
       )
     }
   }
-
-  useEffect(() => {
-    getUserLocation()
-  }, [])
 
   const [selectedColor, setSelectedColor] = useState(productData.colors[0])
   const [selectedSize, setSelectedSize] = useState(productData.sizes[2])
@@ -359,6 +354,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       setLat(lat);;
                     }}
                   />
+                  <a href="#" onClick={getUserLocation}>Current Location</a>
                   {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
                 </div>
                 <div className="product-sidebar__heading">
