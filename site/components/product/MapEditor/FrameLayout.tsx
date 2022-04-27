@@ -12,7 +12,9 @@ import 'leaflet/dist/leaflet.css'
 
 interface LayoutProps {
   title: string
+  titleColor: string
   subtitle: string
+  subtitleColor: string
   height: string
   mapStyle: string // cl0howgz1000414mxx2vhk2jw
   lat: number
@@ -26,7 +28,9 @@ export const DefaultFrame: FC<LayoutProps> = ({
   height,
   mapStyle,
   title,
+  titleColor,
   subtitle,
+  subtitleColor,
 }) => {
   return (
     <div className="mask-w">
@@ -61,13 +65,13 @@ export const DefaultFrame: FC<LayoutProps> = ({
           >
             <h1
               style={{ fontFamily: 'Abril Fatface' }}
-              className="text-black text-4xl font-bold"
+              className={`${titleColor} text-4xl font-bold`}
             >
               {title}
             </h1>
             <span
               style={{ fontFamily: 'Abril Fatface' }}
-              className="text-black text-xl"
+              className={`${subtitleColor} text-black text-xl`}
             >
               {subtitle}
             </span>
@@ -98,7 +102,9 @@ export const CircleFrame: FC<LayoutProps> = ({
   height,
   mapStyle,
   title,
+  titleColor,
   subtitle,
+  subtitleColor,
 }) => {
   return (
     <div className="circle-frame relative">
@@ -134,13 +140,13 @@ export const CircleFrame: FC<LayoutProps> = ({
           >
             <h1
               style={{ fontFamily: 'Abril Fatface' }}
-              className="text-black text-4xl font-bold"
+              className={`${titleColor} text-4xl font-bold`}
             >
               {title}
             </h1>
             <span
               style={{ fontFamily: 'Abril Fatface' }}
-              className="text-black text-xl"
+              className={`${subtitleColor} text-xl`}
             >
               {subtitle}
             </span>

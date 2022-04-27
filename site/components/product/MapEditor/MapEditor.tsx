@@ -1,5 +1,6 @@
 import { FC, useEffect } from 'react'
 import type { Product } from '@commerce/types/product'
+import { ProductOptions } from '@components/product'
 import usePrice from '@framework/product/use-price'
 
 import dynamic from 'next/dynamic'
@@ -56,18 +57,22 @@ const productData = {
   ],
   colors: [
     {
-      name: 'Black',
-      bgColor: 'bg-gray-900',
-      selectedColor: 'ring-gray-400',
-      mapStyle: 'cl0howgz1000414mxx2vhk2jw',
-      mapPreview: 'map-style-blue.png',
-    },
-    {
       name: 'Heather Grey',
       bgColor: 'bg-gray-400',
       selectedColor: 'ring-gray-400',
       mapStyle: 'cjria9ya35nzu2smgxatsz5fp',
       mapPreview: 'map-style-black.png',
+      titleColor: 'text-black-400',
+      subtitleColor: 'text-gray-400'
+    },
+    {
+      name: 'Black',
+      bgColor: 'bg-gray-900',
+      selectedColor: 'ring-gray-400',
+      mapStyle: 'cl0howgz1000414mxx2vhk2jw',
+      mapPreview: 'map-style-blue.png',
+      titleColor: 'text-blue-400',
+      subtitleColor: 'text-blue-200'
     },
     {
       name: 'Heather Pink',
@@ -75,6 +80,8 @@ const productData = {
       selectedColor: 'ring-gray-400',
       mapStyle: 'cl28ypih6000215kuhwwmdvmc',
       mapPreview: 'map-style-pink.png',
+      titleColor: 'text-pink',
+      subtitleColor: 'text-pink-light'
     },
   ],
   sizes: [
@@ -147,14 +154,14 @@ interface MapEditorProps {
 }
 
 const MapEditor: FC<MapEditorProps> = ({ product }) => {
-  const [lat, setLat] = useState(0)
-  const [lng, setLng] = useState(0)
+  const [lat, setLat] = useState(40.70345695121932)
+  const [lng, setLng] = useState(-74.00004777219424)
   const [title, setTitle] = useState('New York')
   const [subtitle, setSubtitle] = useState('United States')
   const [status, setStatus] = useState('')
   const [mapStyle, setMapStyle] = useState('cjria9ya35nzu2smgxatsz5fp')
-
-
+  const [titleColor, setTitleColor] = useState('');
+  const [subtitleColor, setSubtitleColor] = useState('');
 
   const addItem = useAddItem()
   const { openSidebar } = useUI()
@@ -176,7 +183,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
       openSidebar()
       setLoading(false)
     } catch (err) {
-      console.log(err);
+      console.log(err)
       setLoading(false)
     }
   }
@@ -324,7 +331,8 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
               <div>
                 <div className="art-collection m-5">
-                  <div className="art-frame vertical overflow-hidden">{/* change frame with border colors here */}
+                  <div className="art-frame vertical overflow-hidden">
+                    {/* change frame with border colors here */}
                     <MapView
                       title={title}
                       subtitle={subtitle}
@@ -334,6 +342,8 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       lat={lat}
                       mapStyle={mapStyle}
                       layout={2}
+                      titleColor={titleColor}
+                      subtitleColor={subtitleColor}
                     />
                   </div>
                 </div>
@@ -388,22 +398,22 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     // style={{ background: 'red' }}
                     className="w-full p-2 border-2 border-gray-300 rounded-none rounded-r-md"
                     apiKey={'AIzaSyDUc5Y4hdG1FvoJVP7aNhSni4rIoLd_ca0'}
-                    onPlaceSelected={(place: any) => { 
-                      try{
-                      const lat = place.geometry.location.lat()
-                      const lng = place.geometry.location.lng()
-                      const title = place.address_components[0].long_name
-                      const subtitle =
-                        place.address_components[
-                          place.address_components.length - 1
-                        ].long_name
+                    onPlaceSelected={(place: any) => {
+                      try {
+                        const lat = place.geometry.location.lat()
+                        const lng = place.geometry.location.lng()
+                        const title = place.address_components[0].long_name
+                        const subtitle =
+                          place.address_components[
+                            place.address_components.length - 1
+                          ].long_name
 
-                      setTitle(title)
-                      setSubtitle(subtitle)
-                      setLng(lng)
-                      setLat(lat)
-                      setPlacesError('')
-                      }catch (error) {
+                        setTitle(title)
+                        setSubtitle(subtitle)
+                        setLng(lng)
+                        setLat(lat)
+                        setPlacesError('')
+                      } catch (error) {
                         setPlacesError('Error: please select a location')
                       }
                     }}
@@ -460,6 +470,8 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     onChange={(selected) => {
                       setMapStyle(selected.mapStyle)
                       setSelectedColor(selected)
+                      setTitleColor(selected.titleColor);
+                      setSubtitleColor(selected.subtitleColor);
                     }}
                     className="mt-2"
                   >
@@ -500,12 +512,10 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
                 <div className="z-10">
                   {/* Size picker */}
-                  <div className="mt-8">
-                    
-
+                  {/* <div className="mt-8">
                     <div className="w-72">
                       <Listbox value={selectedSize} onChange={setSelectedSize}>
-                      <Listbox.Label className="text-sm font-medium text-gray-900">
+                        <Listbox.Label className="text-sm font-medium text-gray-900">
                           Size
                         </Listbox.Label>
                         <Listbox.Button className="mt-2 w-72 flex flex-row items-center justify-between border-0 border-b-2 border-slate-300 focus:outline-none focus:ring-indigo-500">
@@ -559,21 +569,26 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                         </Listbox.Options>
                       </Listbox>
                     </div>
-                  </div>
+                  </div> */}
+                  <ProductOptions
+                    options={product.options}
+                    selectedOptions={selectedOptions}
+                    setSelectedOptions={setSelectedOptions}
+                  />
 
-                <Button
-            aria-label="Add to Cart"
-            type="button"
-            className={s.button}
-            onClick={addToCart}
-            loading={loading}
-            disabled={variant?.availableForSale === false}
-          >
-            {variant?.availableForSale === false
-              ? 'Not Available'
-              : 'Add To Cart'}
-          </Button>
-                {/* <button
+                  <Button
+                    aria-label="Add to Cart"
+                    type="button"
+                    className={s.button}
+                    onClick={addToCart}
+                    loading={loading}
+                    disabled={variant?.availableForSale === false}
+                  >
+                    {variant?.availableForSale === false
+                      ? 'Not Available'
+                      : 'Add To Cart'}
+                  </Button>
+                  {/* <button
                   type="submit"
                   className="mt-8 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 z-0"
                 >

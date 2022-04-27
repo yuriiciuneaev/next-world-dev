@@ -11,6 +11,8 @@ interface MapViewProps {
   lat: number
   lng: number
   layout: number
+  titleColor: string
+  subtitleColor: string
 }
 
 const MapView: FC<MapViewProps> = (args) => {
