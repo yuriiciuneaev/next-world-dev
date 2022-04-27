@@ -10,9 +10,16 @@ import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
 
 import AutoComplete from 'react-google-autocomplete'
 
-import Input from '@components/ui/Input'
-import GetLocationButton from './GetLocationButton'
 import { ChevronDownIcon } from '@heroicons/react/solid'
+
+import s from '../ProductSidebar/ProductSidebar.module.css'
+import { useAddItem } from '@framework/cart'
+import { Button, useUI } from '@components/ui'
+import {
+  getProductVariant,
+  selectDefaultOptionFromProduct,
+  SelectedOptions,
+} from '../helpers'
 
 const productData = {
   name: 'Custom City Framed Poster',
@@ -146,6 +153,33 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
   const [subtitle, setSubtitle] = useState('United States')
   const [status, setStatus] = useState('')
   const [mapStyle, setMapStyle] = useState('cjria9ya35nzu2smgxatsz5fp')
+
+
+
+  const addItem = useAddItem()
+  const { openSidebar } = useUI()
+  const [loading, setLoading] = useState(false)
+  const [selectedOptions, setSelectedOptions] = useState<SelectedOptions>({})
+
+  useEffect(() => {
+    selectDefaultOptionFromProduct(product, setSelectedOptions)
+  }, [product])
+
+  const variant = getProductVariant(product, selectedOptions)
+  const addToCart = async () => {
+    setLoading(true)
+    try {
+      await addItem({
+        productId: String(product.id),
+        variantId: String(variant ? variant.id : product.variants[0]?.id),
+      })
+      openSidebar()
+      setLoading(false)
+    } catch (err) {
+      console.log(err);
+      setLoading(false)
+    }
+  }
 
   const MapView = useMemo(
     () =>
@@ -287,15 +321,16 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
               <div>
                 <div className="art-collection m-5">
-                  <div className="art-frame">
+                  <div className="art-frame vertical overflow-hidden">{/* change frame with border colors here */}
                     <MapView
                       title={title}
                       subtitle={subtitle}
                       width="354.5px"
-                      height="443px"
+                      height="550px"
                       lng={lng}
                       lat={lat}
                       mapStyle={mapStyle}
+                      layout={2}
                     />
                   </div>
                 </div>
@@ -499,12 +534,24 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   </div>
                 </div>
 
-                <button
+                <Button
+            aria-label="Add to Cart"
+            type="button"
+            className={s.button}
+            onClick={addToCart}
+            loading={loading}
+            disabled={variant?.availableForSale === false}
+          >
+            {variant?.availableForSale === false
+              ? 'Not Available'
+              : 'Add To Cart'}
+          </Button>
+                {/* <button
                   type="submit"
                   className="mt-8 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 z-0"
                 >
                   Add to cart
-                </button>
+                </button> */}
                 </div>
               </form>
 
