@@ -26,6 +26,8 @@ const MapView: FC<MapViewProps> = (args) => {
     case 2:
       return <CircleFrame {...args} />
       break;
+    default:
+      return <DefaultFrame {...args} />
   }
 }
 
