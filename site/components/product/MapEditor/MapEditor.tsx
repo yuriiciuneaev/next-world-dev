@@ -83,7 +83,7 @@ const productData = {
     { name: 'Large - 16in x 20in ', inStock: true },
     { name: 'X Large - 20in x 24in', inStock: true },
   ],
-  orientations: [{ name: 'Portait' }, { name: 'landscape' }],
+  orientations: [{ name: 'Portait' }, { name: 'Landscape' }],
   description: `
     <p>The Basic tee is an honest new take on a classic. The tee uses super soft, pre-shrunk cotton for true comfort and a dependable fit. They are hand cut and sewn locally, with a special dye technique that gives each tee it's own look.</p>
     <p>Looking to stock your closet? The Basic tee also comes in a 3-pack or 5-pack at a bundle discount.</p>
@@ -213,8 +213,11 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
   const [selectedColor, setSelectedColor] = useState(productData.colors[0])
   const [selectedSize, setSelectedSize] = useState(productData.sizes[0])
-  const [selectOrientation, setSelectOrientation] = useState(productData.orientations[0]
+  const [selectOrientation, setSelectOrientation] = useState(
+    productData.orientations[0]
   )
+
+  const [placesError, setPlacesError] = useState('')
 
   const { price } = usePrice({
     amount: product.price.value,
@@ -376,7 +379,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     find the exact area you want to print.
                   </p>
                 </div>
-                <div className="my-7">
+                <div className="my-7 flex flex-col">
                   <h2 className="text-sm font-medium text-gray-900">
                     Location
                   </h2>
@@ -385,7 +388,8 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     // style={{ background: 'red' }}
                     className="w-full p-2 border-2 border-gray-300 rounded-none rounded-r-md"
                     apiKey={'AIzaSyDUc5Y4hdG1FvoJVP7aNhSni4rIoLd_ca0'}
-                    onPlaceSelected={(place: any) => {
+                    onPlaceSelected={(place: any) => { 
+                      try{
                       const lat = place.geometry.location.lat()
                       const lng = place.geometry.location.lng()
                       const title = place.address_components[0].long_name
@@ -398,9 +402,16 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       setSubtitle(subtitle)
                       setLng(lng)
                       setLat(lat)
+                      setPlacesError('')
+                      }catch (error) {
+                        setPlacesError('Error: please select a location')
+                      }
                     }}
                   />
-                  <a href="#" onClick={getUserLocation}>Current Location</a>
+                  <span className="text-red">{placesError}</span>
+                  <a href="#" onClick={getUserLocation}>
+                    Current Location
+                  </a>
                   {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
                 </div>
                 <div className="product-sidebar__heading">
@@ -487,52 +498,68 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   </RadioGroup>
                 </div>
 
-                              <div className="z-10">
-                {/* Size picker */}
-                <div className="mt-8">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                  </div>
+                <div className="z-10">
+                  {/* Size picker */}
+                  <div className="mt-8">
+                    
 
-                  <div className="w-72">
-                    <Listbox value={selectedSize} onChange={setSelectedSize}>
-                      <Listbox.Button className="mt-2 w-72 flex flex-row items-center justify-between rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <span className="block">{selectedSize.name}</span>
-                        <ChevronDownIcon className="right-0 w-5 h-5" />
-                      </Listbox.Button>
+                    <div className="w-72">
+                      <Listbox value={selectedSize} onChange={setSelectedSize}>
+                      <Listbox.Label className="text-sm font-medium text-gray-900">
+                          Size
+                        </Listbox.Label>
+                        <Listbox.Button className="mt-2 w-72 flex flex-row items-center justify-between border-0 border-b-2 border-slate-300 focus:outline-none focus:ring-indigo-500">
+                          <span className="block pl-2 pb-2">
+                            {selectedSize.name}
+                          </span>
+                          <ChevronDownIcon className="right-0 w-5 h-5" />
+                        </Listbox.Button>
 
-                      <Listbox.Options className="absolute mt-1 shadow-2xl  z-10 w-72 bg-white rounded-b-md">
-                        {productData.sizes.map((size, sizeIdx) => (
-                          <Listbox.Option className="pl-2" key={sizeIdx} value={size}>
+                        <Listbox.Options className="absolute mt-1 shadow-2xl  z-10 w-72 bg-white rounded-b-md hover:cursor-pointer">
+                          {productData.sizes.map((size, sizeIdx) => (
+                            <Listbox.Option
+                              className="pl-2 "
+                              key={sizeIdx}
+                              value={size}
+                            >
                               <span>{size.name}</span>
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Listbox>
-                  </div>
-                </div>
+                            </Listbox.Option>
+                          ))}
+                        </Listbox.Options>
+                      </Listbox>
+                    </div>
 
-                <div className="mt-8">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-medium text-gray-900">Frame</h2>
-                  </div>
-                  <div className="w-72">
-                    <Listbox value={selectOrientation} onChange={setSelectOrientation}>
-                      <Listbox.Button className="mt-2 w-72 flex flex-row items-center justify-between rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        <span className="block">{selectOrientation.name}</span>
-                        <ChevronDownIcon className="right-0 w-5 h-5" />
-                      </Listbox.Button>
+                    <div className="my-4 w-72">
+                      <Listbox
+                        value={selectOrientation}
+                        onChange={setSelectOrientation}
+                      >
+                        <Listbox.Label className="text-sm font-medium text-gray-900">
+                          Orientation
+                        </Listbox.Label>
+                        <Listbox.Button className="mt-2 w-72 flex flex-row items-center justify-between border-0 border-b-2 border-slate-300 focus:outline-none focus:ring-indigo-500">
+                          <span className="block pl-2 pb-2">
+                            {selectOrientation.name}
+                          </span>
+                          <ChevronDownIcon className="right-0 w-5 h-5" />
+                        </Listbox.Button>
 
-                      <Listbox.Options className="absolute w-72 mt-1 shadow-2xl bg-white rounded-b-md z-10">
-                        {productData.orientations.map((orientation, orientationIdx) => (
-                          <Listbox.Option className="pl-2" key={orientationIdx} value={orientation}>
-                              <span>{orientation.name}</span>
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Listbox>
+                        <Listbox.Options className="absolute mt-1 shadow-2xl  z-10 w-72 bg-white rounded-b-md hover:cursor-pointer">
+                          {productData.orientations.map(
+                            (orientation, orientationIdx) => (
+                              <Listbox.Option
+                                className="pl-2"
+                                key={orientationIdx}
+                                value={orientation}
+                              >
+                                <span>{orientation.name}</span>
+                              </Listbox.Option>
+                            )
+                          )}
+                        </Listbox.Options>
+                      </Listbox>
+                    </div>
                   </div>
-                </div>
 
                 <Button
             aria-label="Add to Cart"
