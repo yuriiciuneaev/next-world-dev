@@ -461,12 +461,12 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
                   <div className="w-72">
                     <Listbox value={selectedSize} onChange={setSelectedSize}>
-                      <Listbox.Button className="w-72 flex flex-row items-center justify-between   rounded-md">
+                      <Listbox.Button className="mt-2 w-72 flex flex-row items-center justify-between rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <span className="block">{selectedSize.name}</span>
                         <ChevronDownIcon className="right-0 w-5 h-5" />
                       </Listbox.Button>
 
-                      <Listbox.Options className="absolute mt-1 shadow-2xl bg-white rounded-xl z-10 w-72 bg-white rounded-b-md">
+                      <Listbox.Options className="absolute mt-1 shadow-2xl  z-10 w-72 bg-white rounded-b-md">
                         {productData.sizes.map((size, sizeIdx) => (
                           <Listbox.Option className="pl-2" key={sizeIdx} value={size}>
                               <span>{size.name}</span>
@@ -483,7 +483,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   </div>
                   <div className="w-72">
                     <Listbox value={selectOrientation} onChange={setSelectOrientation}>
-                      <Listbox.Button className="w-72 flex flex-row items-center justify-between  rounded-md">
+                      <Listbox.Button className="mt-2 w-72 flex flex-row items-center justify-between rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         <span className="block">{selectOrientation.name}</span>
                         <ChevronDownIcon className="right-0 w-5 h-5" />
                       </Listbox.Button>
