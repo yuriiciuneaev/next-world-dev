@@ -3,15 +3,16 @@ import type { Product } from '@commerce/types/product'
 import usePrice from '@framework/product/use-price'
 
 import dynamic from 'next/dynamic'
-import { useState, useMemo } from 'react'
+import { useState, useMemo, Fragment } from 'react'
 import { StarIcon } from '@heroicons/react/solid'
-import { RadioGroup } from '@headlessui/react'
+import { Menu, RadioGroup, Transition, Listbox } from '@headlessui/react'
 import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
 
-import AutoComplete from 'react-google-autocomplete';
+import AutoComplete from 'react-google-autocomplete'
 
 import Input from '@components/ui/Input'
 import GetLocationButton from './GetLocationButton'
+import { ChevronDownIcon } from '@heroicons/react/solid'
 
 const productData = {
   name: 'Custom City Framed Poster',
@@ -47,30 +48,35 @@ const productData = {
     },
   ],
   colors: [
-    { name: 'Black', bgColor: 'bg-gray-900', selectedColor: 'ring-gray-400', mapStyle: 'cl0howgz1000414mxx2vhk2jw', mapPreview: 'map-style-blue.png' },
+    {
+      name: 'Black',
+      bgColor: 'bg-gray-900',
+      selectedColor: 'ring-gray-400',
+      mapStyle: 'cl0howgz1000414mxx2vhk2jw',
+      mapPreview: 'map-style-blue.png',
+    },
     {
       name: 'Heather Grey',
       bgColor: 'bg-gray-400',
       selectedColor: 'ring-gray-400',
       mapStyle: 'cjria9ya35nzu2smgxatsz5fp',
-      mapPreview: 'map-style-black.png'
+      mapPreview: 'map-style-black.png',
     },
     {
       name: 'Heather Pink',
       bgColor: 'bg-gray-400',
       selectedColor: 'ring-gray-400',
       mapStyle: 'cl28ypih6000215kuhwwmdvmc',
-      mapPreview: 'map-style-pink.png'
+      mapPreview: 'map-style-pink.png',
     },
   ],
   sizes: [
-    { name: 'XXS', inStock: true },
-    { name: 'XS', inStock: true },
-    { name: 'S', inStock: true },
-    { name: 'M', inStock: true },
-    { name: 'L', inStock: true },
-    { name: 'XL', inStock: false },
+    { name: 'Small - 5in x 7in', inStock: true },
+    { name: 'Medium - 8in x 10in', inStock: true },
+    { name: 'Large - 16in x 20in ', inStock: true },
+    { name: 'X Large - 20in x 24in', inStock: true },
   ],
+  orientations: [{ name: 'Portait' }, { name: 'landscape' }],
   description: `
     <p>The Basic tee is an honest new take on a classic. The tee uses super soft, pre-shrunk cotton for true comfort and a dependable fit. They are hand cut and sewn locally, with a special dye technique that gives each tee it's own look.</p>
     <p>Looking to stock your closet? The Basic tee also comes in a 3-pack or 5-pack at a bundle discount.</p>
@@ -83,33 +89,33 @@ const productData = {
   ],
 }
 
-
-{productData.colors.map((color) => (
-  <RadioGroup.Option
-    key={color.name}
-    value={color}
-    className={({ active, checked }) =>
-      classNames(
-        color.selectedColor,
-        active && checked ? 'ring ring-offset-1' : '',
-        !active && checked ? 'ring-2' : '',
-        '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
-      )
-    }
-  >
-    <RadioGroup.Label as="p" className="sr-only">
-      {color.name}
-    </RadioGroup.Label>
-    <span
-      aria-hidden="true"
-      className={classNames(
-        color.bgColor,
-        'h-8 w-8 border border-black border-opacity-10 rounded-full'
-      )}
-    />
-  </RadioGroup.Option>
-))}
-
+{
+  productData.colors.map((color) => (
+    <RadioGroup.Option
+      key={color.name}
+      value={color}
+      className={({ active, checked }) =>
+        classNames(
+          color.selectedColor,
+          active && checked ? 'ring ring-offset-1' : '',
+          !active && checked ? 'ring-2' : '',
+          '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
+        )
+      }
+    >
+      <RadioGroup.Label as="p" className="sr-only">
+        {color.name}
+      </RadioGroup.Label>
+      <span
+        aria-hidden="true"
+        className={classNames(
+          color.bgColor,
+          'h-8 w-8 border border-black border-opacity-10 rounded-full'
+        )}
+      />
+    </RadioGroup.Option>
+  ))
+}
 
 const policies = [
   {
@@ -136,10 +142,10 @@ interface MapEditorProps {
 const MapEditor: FC<MapEditorProps> = ({ product }) => {
   const [lat, setLat] = useState(0)
   const [lng, setLng] = useState(0)
-  const [title, setTitle] = useState('New York');
-  const [subtitle, setSubtitle] = useState('United States');
+  const [title, setTitle] = useState('New York')
+  const [subtitle, setSubtitle] = useState('United States')
   const [status, setStatus] = useState('')
-  const [mapStyle, setMapStyle] = useState('cjria9ya35nzu2smgxatsz5fp');
+  const [mapStyle, setMapStyle] = useState('cjria9ya35nzu2smgxatsz5fp')
 
   const MapView = useMemo(
     () =>
@@ -177,7 +183,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
   }, [])
 
   const [selectedColor, setSelectedColor] = useState(productData.colors[0])
-  const [selectedSize, setSelectedSize] = useState(productData.sizes[2])
+  const [selectedSize, setSelectedSize] = useState(productData.sizes[0])
+  const [selectOrientation, setSelectOrientation] = useState(productData.orientations[0]
+  )
 
   const { price } = usePrice({
     amount: product.price.value,
@@ -349,14 +357,17 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     apiKey={'AIzaSyDUc5Y4hdG1FvoJVP7aNhSni4rIoLd_ca0'}
                     onPlaceSelected={(place: any) => {
                       const lat = place.geometry.location.lat()
-                      const lng = place.geometry.location.lng();
-                      const title = place.address_components[0].long_name;
-                      const subtitle = place.address_components[place.address_components.length - 1].long_name
+                      const lng = place.geometry.location.lng()
+                      const title = place.address_components[0].long_name
+                      const subtitle =
+                        place.address_components[
+                          place.address_components.length - 1
+                        ].long_name
 
-                      setTitle(title);
+                      setTitle(title)
                       setSubtitle(subtitle)
-                      setLng(lng);
-                      setLat(lat);;
+                      setLng(lng)
+                      setLat(lat)
                     }}
                   />
                   {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
@@ -405,7 +416,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   <RadioGroup
                     value={selectedColor}
                     onChange={(selected) => {
-                      setMapStyle(selected.mapStyle);
+                      setMapStyle(selected.mapStyle)
                       setSelectedColor(selected)
                     }}
                     className="mt-2"
@@ -432,7 +443,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                           </RadioGroup.Label>
                           <span
                             aria-hidden="true"
-                            style={{ background: `url("/assets/${color.mapPreview}")` }}
+                            style={{
+                              background: `url("/assets/${color.mapPreview}")`,
+                            }}
                             className={classNames(
                               'h-10 w-10 border border-black border-opacity-10 rounded-full'
                             )}
@@ -443,112 +456,60 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   </RadioGroup>
                 </div>
 
-                <div className="mt-8">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                  </div>
-
-                </div>
-
+                              <div className="z-10">
                 {/* Size picker */}
                 <div className="mt-8">
                   <div className="flex items-center justify-between">
                     <h2 className="text-sm font-medium text-gray-900">Size</h2>
-                    <a
-                      href="#"
-                      className="text-sm font-medium text-indigo-600 hover:text-indigo-500"
-                    >
-                      See sizing chart
-                    </a>
                   </div>
 
-                  <RadioGroup
-                    value={selectedSize}
-                    onChange={setSelectedSize}
-                    className="mt-2"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a size
-                    </RadioGroup.Label>
-                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                      {productData.sizes.map((size) => (
-                        <RadioGroup.Option
-                          key={size.name}
-                          value={size}
-                          className={({ active, checked }) =>
-                            classNames(
-                              size.inStock
-                                ? 'cursor-pointer focus:outline-none'
-                                : 'opacity-25 cursor-not-allowed',
-                              active
-                                ? 'ring-2 ring-offset-2 ring-indigo-500'
-                                : '',
-                              checked
-                                ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
-                                : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-                              'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1'
-                            )
-                          }
-                          disabled={!size.inStock}
-                        >
-                          <RadioGroup.Label as="p">
-                            {size.name}
-                          </RadioGroup.Label>
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
+                  <div className="w-72">
+                    <Listbox value={selectedSize} onChange={setSelectedSize}>
+                      <Listbox.Button className="w-72 flex flex-row items-center justify-between   rounded-md">
+                        <span className="block">{selectedSize.name}</span>
+                        <ChevronDownIcon className="right-0 w-5 h-5" />
+                      </Listbox.Button>
+
+                      <Listbox.Options className="absolute mt-1 shadow-2xl bg-white rounded-xl z-10 w-72 bg-white rounded-b-md">
+                        {productData.sizes.map((size, sizeIdx) => (
+                          <Listbox.Option className="pl-2" key={sizeIdx} value={size}>
+                              <span>{size.name}</span>
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Listbox>
+                  </div>
                 </div>
 
                 <div className="mt-8">
                   <div className="flex items-center justify-between">
                     <h2 className="text-sm font-medium text-gray-900">Frame</h2>
                   </div>
+                  <div className="w-72">
+                    <Listbox value={selectOrientation} onChange={setSelectOrientation}>
+                      <Listbox.Button className="w-72 flex flex-row items-center justify-between  rounded-md">
+                        <span className="block">{selectOrientation.name}</span>
+                        <ChevronDownIcon className="right-0 w-5 h-5" />
+                      </Listbox.Button>
 
-                  <RadioGroup
-                    value={selectedSize}
-                    onChange={setSelectedSize}
-                    className="mt-2"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a size
-                    </RadioGroup.Label>
-                    <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
-                      {productData.sizes.map((size) => (
-                        <RadioGroup.Option
-                          key={size.name}
-                          value={size}
-                          className={({ active, checked }) =>
-                            classNames(
-                              size.inStock
-                                ? 'cursor-pointer focus:outline-none'
-                                : 'opacity-25 cursor-not-allowed',
-                              active
-                                ? 'ring-2 ring-offset-2 ring-indigo-500'
-                                : '',
-                              checked
-                                ? 'bg-indigo-600 border-transparent text-white hover:bg-indigo-700'
-                                : 'bg-white border-gray-200 text-gray-900 hover:bg-gray-50',
-                              'border rounded-md py-3 px-3 flex items-center justify-center text-sm font-medium uppercase sm:flex-1'
-                            )
-                          }
-                          disabled={!size.inStock}
-                        >
-                          <RadioGroup.Label as="p">
-                            {size.name}
-                          </RadioGroup.Label>
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
+                      <Listbox.Options className="absolute w-72 mt-1 shadow-2xl bg-white rounded-b-md z-10">
+                        {productData.orientations.map((orientation, orientationIdx) => (
+                          <Listbox.Option className="pl-2" key={orientationIdx} value={orientation}>
+                              <span>{orientation.name}</span>
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Listbox>
+                  </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="mt-8 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  className="mt-8 w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 z-0"
                 >
                   Add to cart
                 </button>
+                </div>
               </form>
 
               {/* productData details */}
