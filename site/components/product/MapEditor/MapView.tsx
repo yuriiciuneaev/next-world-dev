@@ -33,7 +33,7 @@ const MapView: FC<MapViewProps> = ({
   const { position } = useLocation()
 
   return (
-    <>
+    <div className="mask-w">
       <MapContainer
         zoom={13}
         center={[lat,lng]}
@@ -90,7 +90,7 @@ const MapView: FC<MapViewProps> = ({
         url={`https://api.mapbox.com/styles/v1/jbedo/cjria9ya35nzu2smgxatsz5fp.html?title=view&access_token=pk.eyJ1IjoiamJlZG8iLCJhIjoiY2lrYm50dWR4MG03cHZqa3BycXE1dmw4dyJ9.v6Mp7vCiYGVe49UFjooYtQ&zoomwheel=true&fresh=true#10/42.3624/-71.02`}
       /> */}
       </MapContainer>
-    </>
+    </div>
   )
 }
 

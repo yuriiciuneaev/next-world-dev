@@ -76,6 +76,7 @@ export default function Slug({
   return router.isFallback ? (
     <h1>Loading...</h1>
   ) : (
+    // this can be cleaned up so its more flexible once we want more custom editors
     slug === 'create-a-map' ? <MapEditor product={product} /> : <ProductView product={product} relatedProducts={relatedProducts} />
   )
 }

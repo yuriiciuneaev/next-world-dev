@@ -27,6 +27,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
 
   const variant = getProductVariant(product, selectedOptions)
   const addToCart = async () => {
+    debugger;
     setLoading(true)
     try {
       await addItem({
@@ -36,6 +37,7 @@ const ProductSidebar: FC<ProductSidebarProps> = ({ product, className }) => {
       openSidebar()
       setLoading(false)
     } catch (err) {
+      console.log(err);
       setLoading(false)
     }
   }
