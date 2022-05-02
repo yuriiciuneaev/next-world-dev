@@ -20,10 +20,10 @@ const MapView: FC<MapViewProps> = (args) => {
   const { layout } = args;
 
   switch (layout) {
-    case 1:
+    case 0:
       return <DefaultFrame {...args} />
       break;
-    case 2:
+    case 1:
       return <CircleFrame {...args} />
       break;
     default:

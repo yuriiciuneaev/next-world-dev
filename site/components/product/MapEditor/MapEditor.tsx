@@ -55,6 +55,18 @@ const productData = {
       primary: false,
     },
   ],
+  frames: [
+    {
+      jd: 0,
+      name: 'default',
+      preview: ''
+    },
+    {
+      id: 1,
+      name: 'circle',
+      preview: ''
+    }
+  ],
   colors: [
     {
       name: 'Heather Grey',
@@ -69,7 +81,7 @@ const productData = {
       name: 'Black',
       bgColor: 'bg-gray-900',
       selectedColor: 'ring-gray-400',
-      mapStyle: 'cl0howgz1000414mxx2vhk2jw',
+      mapStyle: 'cl2j6f9ae001014osfg024er5',
       mapPreview: 'map-style-blue.png',
       titleColor: 'text-blue-400',
       subtitleColor: 'text-blue-200'
@@ -82,7 +94,24 @@ const productData = {
       mapPreview: 'map-style-pink.png',
       titleColor: 'text-pink',
       subtitleColor: 'text-pink-light'
+
+      // theme: {
+      //   mapStyle: '',
+      //   mapPreview: ''
+      //   titleColor: '',
+      //   subtitleColor: '',
+      // }
     },
+
+
+    {
+      name: 'Minimal',
+      bgColor: 'bg-gray-400',
+      mapStyle: 'cl2nmx5yh003d14n1rokqj5lf',
+      mapPreview: 'map-style-pink.png',
+      titleColor: 'text-black-400',
+      subtitleColor: 'text-gray-400'
+    }
   ],
   sizes: [
     { name: 'Small - 5in x 7in', inStock: true },
@@ -160,6 +189,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
   const [subtitle, setSubtitle] = useState('United States')
   const [status, setStatus] = useState('')
   const [mapStyle, setMapStyle] = useState('cjria9ya35nzu2smgxatsz5fp')
+  const [frame, setFrameStyle] = useState(0);
   const [titleColor, setTitleColor] = useState('');
   const [subtitleColor, setSubtitleColor] = useState('');
 
@@ -197,7 +227,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
           ssr: false, // This line is important. It's what prevents server-side render
         }
       ),
-    [lat, mapStyle] // state that should refresh the map
+    [lat, mapStyle, frame] // state that should refresh the map
   )
 
   const getUserLocation = () => {
@@ -234,6 +264,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
   return (
     <div className="bg-white">
+
+
+
       <div className="pt-6 pb-16 sm:pb-24">
         <nav
           aria-label="Breadcrumb"
@@ -341,7 +374,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       lng={lng}
                       lat={lat}
                       mapStyle={mapStyle}
-                      layout={2}
+                      layout={frame}
                       titleColor={titleColor}
                       subtitleColor={subtitleColor}
                     />
@@ -425,40 +458,60 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
                 </div>
                 <div className="product-sidebar__heading">
-                  <h2 className="text-lg font-bold text-gray-900">Text</h2>
-                  <p className="text-gray-400">
-                    Customize the print with your own text
-                  </p>
-                </div>
-                <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">Title</h2>
-                  <input
-                    type="text"
-                    name="title"
-                    className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    onChange={(ev) => setTitle(ev.target.value)}
-                    defaultValue={title}
-                  />
-                </div>
-                <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">
-                    Subtitle
-                  </h2>
-                  <input
-                    type="text"
-                    name="subtitle"
-                    id="subtitle"
-                    className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    onChange={(ev) => setSubtitle(ev.target.value)}
-                    defaultValue={subtitle}
-                  />
-                </div>
-                <div className="product-sidebar__heading">
                   <h2 className="text-lg font-bold text-gray-900">Map Style</h2>
                   <p className="text-gray-400">
                     Change the color of the map and add finishing touches
                   </p>
                 </div>
+                {/* Color picker */}
+                <div className="my-7">
+                  <h2 className="text-sm font-medium text-gray-900">
+                    Frame Style
+                  </h2>
+
+                  <RadioGroup
+                    value={selectedColor}
+                    onChange={(selected) => {
+                      console.log(selected);
+                      setFrameStyle(selected)
+                    }}
+                    className="mt-2"
+                  >
+                    <RadioGroup.Label className="sr-only">
+                      Choose a color
+                    </RadioGroup.Label>
+                    <div className="flex items-center space-x-3">
+                      {productData.frames.map((frame) => (
+                        <RadioGroup.Option
+                          key={frame.id}
+                          value={frame.id}
+                          className={({ active, checked }) =>
+                            classNames(
+                              // color.selectedColor,
+                              active && checked ? 'ring ring-offset-1' : '',
+                              !active && checked ? 'ring-2' : '',
+                              '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
+                            )
+                          }
+                        >
+                          <RadioGroup.Label as="p" className="sr-only">
+                            {frame.name}
+                          </RadioGroup.Label>
+                          <span
+                            aria-hidden="true"
+                            style={{
+                              background: `url("/assets/${frame.preview}")`,
+                            }}
+                            className={classNames(
+                              'h-10 w-10 border border-black border-opacity-10 rounded-full'
+                            )}
+                          />
+                        </RadioGroup.Option>
+                      ))}
+                    </div>
+                  </RadioGroup>
+                </div>
+
                 {/* Color picker */}
                 <div className="my-7">
                   <h2 className="text-sm font-medium text-gray-900">
@@ -508,6 +561,37 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       ))}
                     </div>
                   </RadioGroup>
+                </div>
+
+
+                <div className="product-sidebar__heading">
+                  <h2 className="text-lg font-bold text-gray-900">Custom Text</h2>
+                  <p className="text-gray-400">
+                    Customize the print with your own text
+                  </p>
+                </div>
+                <div className="my-7">
+                  <h2 className="text-sm font-medium text-gray-900">Big Text</h2>
+                  <input
+                    type="text"
+                    name="title"
+                    className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                    onChange={(ev) => setTitle(ev.target.value)}
+                    defaultValue={title}
+                  />
+                </div>
+                <div className="my-7">
+                  <h2 className="text-sm font-medium text-gray-900">
+                    Small Text
+                  </h2>
+                  <input
+                    type="text"
+                    name="subtitle"
+                    id="subtitle"
+                    className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                    onChange={(ev) => setSubtitle(ev.target.value)}
+                    defaultValue={subtitle}
+                  />
                 </div>
 
                 <div className="z-10">

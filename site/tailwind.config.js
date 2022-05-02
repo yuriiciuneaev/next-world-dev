@@ -32,6 +32,7 @@ module.exports = {
         'violet-dark': 'var(--violet-dark)',
         pink: 'var(--pink)',
         'pink-light': 'var(--pink-light)',
+        'minimal': '#47A8B1',
         cyan: 'var(--cyan)',
         blue: 'var(--blue)',
         green: 'var(--green)',

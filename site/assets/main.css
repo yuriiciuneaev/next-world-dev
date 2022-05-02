@@ -42,6 +42,7 @@
   box-sizing: border-box;
   display: block;
   /* margin:100px; */
+  /* transform: scale(0.5); */
 }
 
 .art-label {
