@@ -406,11 +406,11 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
             </div>
 
             {/* Image gallery */}
-            <div className="mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
+            <div className="md:mt-8 lg:mt-0 lg:col-start-1 lg:col-span-7 lg:row-start-1 lg:row-span-3">
               <h2 className="sr-only">Images</h2>
 
               <div>
-                <div className="art-collection m-5">
+                <div className="art-collection">
                   <div className="art-frame vertical overflow-hidden relative">
                     {/* change frame with border colors here */}
                     {isMarkerEnabled && (
@@ -480,7 +480,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
               </div>
             </div>
 
-            <div className="product-sidebar mt-8 lg:col-span-5">
+            <div className="product-sidebar lg:col-span-5">
               <Tab.Group as="div">
                 <div className="border-b border-gray-200">
                   <Tab.List className="-mb-px flex space-x-8">
