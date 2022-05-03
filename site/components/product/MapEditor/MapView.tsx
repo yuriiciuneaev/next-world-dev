@@ -17,7 +17,6 @@ interface MapViewProps {
 }
 
 const MapView: FC<MapViewProps> = (args) => {
-  const { position } = useLocation()
   const { layout } = args;
 
   switch (layout) {
