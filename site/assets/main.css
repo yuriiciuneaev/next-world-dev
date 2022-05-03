@@ -96,6 +96,11 @@
   /* width: 354.5px; */
   /* height: 443px; */
 }
+@media screen and (max-width:660px) {
+  .vertical {
+    transform: scale(0.8);
+  }
+}
 
 .text-flower {
   font-family: 'Indie Flower', cursive;

@@ -1,6 +1,5 @@
 import { FC } from 'react'
 import { DefaultFrame, CircleFrame } from './FrameLayout';
-import useLocation from './use-location.hook'
 
 interface MapViewProps {
   title: string
