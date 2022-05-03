@@ -7,8 +7,16 @@ import usePrice from '@framework/product/use-price'
 import dynamic from 'next/dynamic'
 import { useState, useMemo, Fragment } from 'react'
 import { StarIcon } from '@heroicons/react/solid'
-import { Menu, RadioGroup, Transition, Listbox } from '@headlessui/react'
-import { CurrencyDollarIcon, GlobeIcon } from '@heroicons/react/outline'
+import { Menu, RadioGroup, Transition, Listbox, Tab } from '@headlessui/react'
+import {
+  CurrencyDollarIcon,
+  DocumentTextIcon,
+  DuplicateIcon,
+  EyeIcon,
+  GlobeIcon,
+  PhotographIcon,
+  ViewListIcon,
+} from '@heroicons/react/outline'
 
 import AutoComplete from 'react-google-autocomplete'
 
@@ -220,7 +228,7 @@ interface MapEditorProps {
 
 const MapEditor: FC<MapEditorProps> = ({ product }) => {
   const [center, setCenter] = useState([40.70345695121932, -74.00004777219424])
-  const [isMarkerEnabled, setMarkerEnabled] = useState(true);
+  const [isMarkerEnabled, setMarkerEnabled] = useState(true)
   const [lat, setLat] = useState(40.70345695121932)
   const [lng, setLng] = useState(-74.00004777219424)
   const [title, setTitle] = useState('New York')
@@ -473,248 +481,362 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
             </div>
 
             <div className="product-sidebar mt-8 lg:col-span-5">
-              <form>
-                <div className="product-sidebar__heading">
-                  <h2 className="text-lg font-bold text-gray-900">Location</h2>
-                  <p className="text-gray-400">
-                    Find your favorite place and move around the map until you
-                    find the exact area you want to print.
-                  </p>
-                </div>
-                <div className="my-7 flex flex-col">
-                  <h2 className="text-sm font-medium text-gray-900">
-                    Location
-                  </h2>
-                  <AutoComplete
-                    // className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    // style={{ background: 'red' }}
-                    className="w-full p-2 border-2 border-gray-300 rounded-none rounded-r-md"
-                    apiKey={'AIzaSyDUc5Y4hdG1FvoJVP7aNhSni4rIoLd_ca0'}
-                    onPlaceSelected={(place: any) => {
-                      try {
-                        const lat = place.geometry.location.lat()
-                        const lng = place.geometry.location.lng()
-                        const title = place.address_components[0].long_name
-                        const subtitle =
-                          place.address_components[
-                            place.address_components.length - 1
-                          ].long_name
-
-                        setTitle(title)
-                        setSubtitle(subtitle)
-                        setLng(lng)
-                        setLat(lat)
-                        setPlacesError('')
-                      } catch (error) {
-                        setPlacesError('Error: please select a location')
+              <Tab.Group as="div">
+                <div className="border-b border-gray-200">
+                  <Tab.List className="-mb-px flex space-x-8">
+                    <Tab
+                      className={({ selected }) =>
+                        classNames(
+                          selected
+                            ? 'border-indigo-600 text-indigo-600'
+                            : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
+                          'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                        )
                       }
-                    }}
-                  />
-                  <span className="text-red">{placesError}</span>
-                  <a
-                    href="#"
-                    className="mt-4 text-gray-500"
-                    onClick={getUserLocation}
-                  >
-                    <LocationMarkerIcon className="h-6 w-6 text-red inline mr-2" />
-                    Use Current Location
-                  </a>
-                  {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
+                    >
+                      <StarIcon className="h-6 w-6 text-red inline mr-2" />
+                      Location
+                    </Tab>
+                    <Tab
+                      className={({ selected }) =>
+                        classNames(
+                          selected
+                            ? 'border-indigo-600 text-indigo-600'
+                            : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
+                          'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                        )
+                      }
+                    >
+                      <PhotographIcon className="h-6 w-6 text-red inline mr-2" />
+                      Design
+                    </Tab>
+                    <Tab
+                      className={({ selected }) =>
+                        classNames(
+                          selected
+                            ? 'border-indigo-600 text-indigo-600'
+                            : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
+                          'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                        )
+                      }
+                    >
+                      <DocumentTextIcon className="h-6 w-6 text-red inline mr-2" />
+                      Text
+                    </Tab>
+                    <Tab
+                      className={({ selected }) =>
+                        classNames(
+                          selected
+                            ? 'border-indigo-600 text-indigo-600'
+                            : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
+                          'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                        )
+                      }
+                    >
+                      <DuplicateIcon className="h-6 w-6 text-red inline mr-2" />
+                      Format
+                    </Tab>
+                  </Tab.List>
                 </div>
-                <div className="product-sidebar__heading">
-                  <h2 className="text-lg font-bold text-gray-900">
-                    Place A Marker?
-                  </h2>
-                  <div className="mt-2 relative flex items-start">
-                    <div className="flex items-center h-5">
-                      <input
-                        id="comments"
-                        aria-describedby="comments-description"
-                        name="comments"
-                        type="checkbox"
-                        checked={isMarkerEnabled}
-                        onChange={(ev) => setMarkerEnabled(!isMarkerEnabled)}
-                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                <Tab.Panels as={Fragment}>
+                  <Tab.Panel>
+                    <h3 className="sr-only">Customer Reviews</h3>
+
+                    <div className="mt-4 prose prose-sm max-w-none text-gray-500">
+                      <div className="product-sidebar__heading">
+                        <h2 className="text-lg font-bold text-gray-900">
+                          Location
+                        </h2>
+                        <p className="text-gray-400">
+                          Find your favorite place and move around the map until
+                          you find the exact area you want to print.
+                        </p>
+                      </div>
+                      <div className="my-7 flex flex-col">
+                        <h2 className="text-sm font-medium text-gray-900">
+                          Location
+                        </h2>
+                        <AutoComplete
+                          // className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                          // style={{ background: 'red' }}
+                          className="w-full p-2 border-2 border-gray-300 rounded-none rounded-r-md"
+                          apiKey={'AIzaSyDUc5Y4hdG1FvoJVP7aNhSni4rIoLd_ca0'}
+                          onPlaceSelected={(place: any) => {
+                            try {
+                              const lat = place.geometry.location.lat()
+                              const lng = place.geometry.location.lng()
+                              const title =
+                                place.address_components[0].long_name
+                              const subtitle =
+                                place.address_components[
+                                  place.address_components.length - 1
+                                ].long_name
+
+                              setTitle(title)
+                              setSubtitle(subtitle)
+                              setLng(lng)
+                              setLat(lat)
+                              setPlacesError('')
+                            } catch (error) {
+                              setPlacesError('Error: please select a location')
+                            }
+                          }}
+                        />
+                        <span className="text-red">{placesError}</span>
+                        <a
+                          href="#"
+                          className="mt-4 text-gray-500"
+                          onClick={getUserLocation}
+                        >
+                          <LocationMarkerIcon className="h-6 w-6 text-red inline mr-2" />
+                          Use Current Location
+                        </a>
+                        {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
+                      </div>
+
+                      <div className="product-sidebar__heading">
+                        <h2 className="text-lg font-bold text-gray-900">
+                          Place A Marker?
+                        </h2>
+                        <div className="mt-2 relative flex items-start">
+                          <div className="flex items-center h-5">
+                            <input
+                              id="comments"
+                              aria-describedby="comments-description"
+                              name="comments"
+                              type="checkbox"
+                              checked={isMarkerEnabled}
+                              onChange={(ev) =>
+                                setMarkerEnabled(!isMarkerEnabled)
+                              }
+                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                            />
+                          </div>
+                          <div className="ml-3 text-sm">
+                            <label
+                              htmlFor="comments"
+                              className="font-medium text-gray-700"
+                            >
+                              Add map marker
+                            </label>
+                            <span
+                              id="comments-description"
+                              className="text-gray-500"
+                            >
+                              <span className="sr-only">New comments </span> -
+                              mark a special place or event.
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="my-4">
+                        <button
+                          type="button"
+                          className="inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ring-2 ring-gray-200"
+                        >
+                          <HeartIcon
+                            className="h-6 w-6 text-red"
+                            aria-hidden="true"
+                          />
+                        </button>
+                        <button
+                          type="button"
+                          className="mx-4 inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ring-2 ring-gray-200"
+                        >
+                          <HeartIcon
+                            className="h-6 w-6 text-red"
+                            aria-hidden="true"
+                          />
+                        </button>
+                      </div>
+                    </div>
+                  </Tab.Panel>
+
+                  <Tab.Panel as="dl" className="text-sm text-gray-500">
+                    <h3 className="sr-only">Map Style</h3>
+
+                    <div className="mt-4 prose prose-sm max-w-none text-gray-500">
+                      <div className="product-sidebar__heading">
+                        <h2 className="text-lg font-bold text-gray-900">
+                          Map Style
+                        </h2>
+                        <p className="text-gray-400">
+                          Change the color of the map and add finishing touches
+                        </p>
+                      </div>
+                      {/* Color picker */}
+                      <div className="my-7">
+                        <h2 className="text-sm font-medium text-gray-900">
+                          Frame Style
+                        </h2>
+
+                        <RadioGroup
+                          value={selectedColor}
+                          onChange={(selected) => {
+                            console.log(selected)
+                            setFrameStyle(selected)
+                          }}
+                          className="mt-2"
+                        >
+                          <RadioGroup.Label className="sr-only">
+                            Choose a color
+                          </RadioGroup.Label>
+                          <div className="flex items-center space-x-3">
+                            {productData.frames.map((frame) => (
+                              <RadioGroup.Option
+                                key={frame.id}
+                                value={frame.id}
+                                className={({ active, checked }) =>
+                                  classNames(
+                                    // color.selectedColor,
+                                    active && checked
+                                      ? 'ring ring-offset-1'
+                                      : '',
+                                    !active && checked ? 'ring-2' : '',
+                                    '-m-0.5 relative p-0.5 flex items-center justify-center cursor-pointer focus:outline-none'
+                                  )
+                                }
+                              >
+                                <RadioGroup.Label as="p" className="sr-only">
+                                  {frame.name}
+                                </RadioGroup.Label>
+                                <span
+                                  aria-hidden="true"
+                                  style={{
+                                    background: `url("/assets/${frame.preview}")`,
+                                    backgroundSize: 'cover',
+                                  }}
+                                  className={classNames('h-10 w-10')}
+                                />
+                              </RadioGroup.Option>
+                            ))}
+                          </div>
+                        </RadioGroup>
+                      </div>
+
+                      {/* Color picker */}
+                      <div className="my-7">
+                        <h2 className="text-sm font-medium text-gray-900">
+                          Map Style
+                        </h2>
+
+                        <RadioGroup
+                          value={selectedColor}
+                          onChange={(selected) => {
+                            setMapStyle(selected.mapStyle)
+                            setLat(center[0])
+                            setLng(center[1])
+                            setSelectedColor(selected)
+                            setTitleColor(selected.titleColor)
+                            setSubtitleColor(selected.subtitleColor)
+                          }}
+                          className="mt-2"
+                        >
+                          <RadioGroup.Label className="sr-only">
+                            Choose a color
+                          </RadioGroup.Label>
+                          <div className="flex items-center space-x-3">
+                            {productData.colors.map((color) => (
+                              <RadioGroup.Option
+                                key={color.name}
+                                value={color}
+                                className={({ active, checked }) =>
+                                  classNames(
+                                    color.selectedColor,
+                                    active && checked
+                                      ? 'ring ring-offset-1'
+                                      : '',
+                                    !active && checked ? 'ring-2' : '',
+                                    '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
+                                  )
+                                }
+                              >
+                                <RadioGroup.Label as="p" className="sr-only">
+                                  {color.name}
+                                </RadioGroup.Label>
+                                <span
+                                  aria-hidden="true"
+                                  style={{
+                                    background: `url("/assets/${color.mapPreview}")`,
+                                  }}
+                                  className={classNames(
+                                    'h-10 w-10 border border-black border-opacity-10 rounded-full'
+                                  )}
+                                />
+                              </RadioGroup.Option>
+                            ))}
+                          </div>
+                        </RadioGroup>
+                      </div>
+                    </div>
+                    {/* {faqs.map((faq) => (
+                    <Fragment key={faq.question}>
+                      <dt className="mt-10 font-medium text-gray-900">{faq.question}</dt>
+                      <dd className="mt-2 prose prose-sm max-w-none text-gray-500">
+                        <p>{faq.answer}</p>
+                      </dd>
+                    </Fragment>
+                  ))} */}
+                  </Tab.Panel>
+
+                  <Tab.Panel>
+                    <h3 className="sr-only">License</h3>
+                    <div className="mt-4 prose prose-sm max-w-none text-gray-500">
+                      <div className="product-sidebar__heading">
+                        <h2 className="text-lg font-bold text-gray-900">
+                          Custom Text
+                        </h2>
+                        <p className="text-gray-400">
+                          Customize the print with your own text
+                        </p>
+                      </div>
+                      <div className="my-7">
+                        <h2 className="text-sm font-medium text-gray-900">
+                          Big Text
+                        </h2>
+                        <input
+                          type="text"
+                          name="title"
+                          className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                          onChange={(ev) => setTitle(ev.target.value)}
+                          defaultValue={title}
+                        />
+                      </div>
+                      <div className="my-7">
+                        <h2 className="text-sm font-medium text-gray-900">
+                          Small Text
+                        </h2>
+                        <input
+                          type="text"
+                          name="subtitle"
+                          id="subtitle"
+                          className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
+                          onChange={(ev) => setSubtitle(ev.target.value)}
+                          defaultValue={subtitle}
+                        />
+                      </div>
+                    </div>
+                    {/* <div
+                    className="prose prose-sm max-w-none text-gray-500"
+                    dangerouslySetInnerHTML={{ __html: license.content }}
+                  /> */}
+                  </Tab.Panel>
+                  <Tab.Panel>
+                    <h3 className="sr-only">Format</h3>
+                    <div className="mt-4 prose prose-sm max-w-none text-gray-500">
+                      <ProductOptions
+                        options={product.options}
+                        selectedOptions={selectedOptions}
+                        setSelectedOptions={setSelectedOptions}
                       />
                     </div>
-                    <div className="ml-3 text-sm">
-                      <label
-                        htmlFor="comments"
-                        className="font-medium text-gray-700"
-                      >
-                        Add map marker
-                      </label>
-                      <span id="comments-description" className="text-gray-500">
-                        <span className="sr-only">New comments </span> - mark a
-                        special place or event.
-                      </span>
-                    </div>
-                  </div>
-                </div>
-                <div className="my-4">
-                  <button
-                    type="button"
-                    className="inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ring-2 ring-gray-200"
-                  >
-                    <HeartIcon
-                      className="h-6 w-6 text-red"
-                      aria-hidden="true"
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    className="mx-4 inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ring-2 ring-gray-200"
-                  >
-                    <HeartIcon
-                      className="h-6 w-6 text-red"
-                      aria-hidden="true"
-                    />
-                  </button>
-                </div>
-                <div className="product-sidebar__heading">
-                  <h2 className="text-lg font-bold text-gray-900">Map Style</h2>
-                  <p className="text-gray-400">
-                    Change the color of the map and add finishing touches
-                  </p>
-                </div>
-                {/* Color picker */}
-                <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">
-                    Frame Style
-                  </h2>
+                  </Tab.Panel>
+                </Tab.Panels>
+              </Tab.Group>
 
-                  <RadioGroup
-                    value={selectedColor}
-                    onChange={(selected) => {
-                      console.log(selected)
-                      setFrameStyle(selected)
-                    }}
-                    className="mt-2"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a color
-                    </RadioGroup.Label>
-                    <div className="flex items-center space-x-3">
-                      {productData.frames.map((frame) => (
-                        <RadioGroup.Option
-                          key={frame.id}
-                          value={frame.id}
-                          className={({ active, checked }) =>
-                            classNames(
-                              // color.selectedColor,
-                              active && checked ? 'ring ring-offset-1' : '',
-                              !active && checked ? 'ring-2' : '',
-                              '-m-0.5 relative p-0.5 flex items-center justify-center cursor-pointer focus:outline-none'
-                            )
-                          }
-                        >
-                          <RadioGroup.Label as="p" className="sr-only">
-                            {frame.name}
-                          </RadioGroup.Label>
-                          <span
-                            aria-hidden="true"
-                            style={{
-                              background: `url("/assets/${frame.preview}")`,
-                              backgroundSize: 'cover',
-                            }}
-                            className={classNames(
-                              'h-10 w-10'
-                            )}
-                          />
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </div>
+              <form>
 
-                {/* Color picker */}
-                <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">
-                    Map Style
-                  </h2>
-
-                  <RadioGroup
-                    value={selectedColor}
-                    onChange={(selected) => {
-                      setMapStyle(selected.mapStyle)
-                      setLat(center[0])
-                      setLng(center[1])
-                      setSelectedColor(selected)
-                      setTitleColor(selected.titleColor)
-                      setSubtitleColor(selected.subtitleColor)
-                    }}
-                    className="mt-2"
-                  >
-                    <RadioGroup.Label className="sr-only">
-                      Choose a color
-                    </RadioGroup.Label>
-                    <div className="flex items-center space-x-3">
-                      {productData.colors.map((color) => (
-                        <RadioGroup.Option
-                          key={color.name}
-                          value={color}
-                          className={({ active, checked }) =>
-                            classNames(
-                              color.selectedColor,
-                              active && checked ? 'ring ring-offset-1' : '',
-                              !active && checked ? 'ring-2' : '',
-                              '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
-                            )
-                          }
-                        >
-                          <RadioGroup.Label as="p" className="sr-only">
-                            {color.name}
-                          </RadioGroup.Label>
-                          <span
-                            aria-hidden="true"
-                            style={{
-                              background: `url("/assets/${color.mapPreview}")`,
-                            }}
-                            className={classNames(
-                              'h-10 w-10 border border-black border-opacity-10 rounded-full'
-                            )}
-                          />
-                        </RadioGroup.Option>
-                      ))}
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                <div className="product-sidebar__heading">
-                  <h2 className="text-lg font-bold text-gray-900">
-                    Custom Text
-                  </h2>
-                  <p className="text-gray-400">
-                    Customize the print with your own text
-                  </p>
-                </div>
-                <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">
-                    Big Text
-                  </h2>
-                  <input
-                    type="text"
-                    name="title"
-                    className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    onChange={(ev) => setTitle(ev.target.value)}
-                    defaultValue={title}
-                  />
-                </div>
-                <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">
-                    Small Text
-                  </h2>
-                  <input
-                    type="text"
-                    name="subtitle"
-                    id="subtitle"
-                    className="focus:ring-sky-500 focus:border-sky-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300"
-                    onChange={(ev) => setSubtitle(ev.target.value)}
-                    defaultValue={subtitle}
-                  />
-                </div>
-
-                <div className="z-10">
+                <div className="z-10 mt-8">
                   {/* Size picker */}
                   {/* <div className="mt-8">
                     <div className="w-72">
@@ -774,11 +896,11 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       </Listbox>
                     </div>
                   </div> */}
-                  <ProductOptions
+                  {/* <ProductOptions
                     options={product.options}
                     selectedOptions={selectedOptions}
                     setSelectedOptions={setSelectedOptions}
-                  />
+                  /> */}
 
                   <Button
                     aria-label="Add to Cart"
