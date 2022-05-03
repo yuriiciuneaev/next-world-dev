@@ -10,6 +10,13 @@ const Head: VFC = () => {
         content="width=device-width, initial-scale=1"
       />
       <link rel="manifest" href="/site.webmanifest" key="site-manifest" />
+
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Homemade+Apple&family=Indie+Flower&family=Rock+Salt&display=swap"
+        rel="stylesheet"
+      />
     </SEO>
   )
 }

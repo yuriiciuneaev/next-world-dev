@@ -14,7 +14,6 @@ const ProductOptions: React.FC<ProductOptionsProps> = ({
   selectedOptions,
   setSelectedOptions,
 }) => {
-  debugger;
   return (
     <div>
       {options.map((opt) => (

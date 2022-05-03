@@ -1,4 +1,5 @@
-import { FC } from 'react'
+// @ts-nocheck
+import { FC, useEffect, useCallback, useState } from 'react'
 import {
   LayersControl,
   SVGOverlay,
@@ -7,8 +8,10 @@ import {
   Popup,
   TileLayer,
   Circle,
+  useMap,
 } from 'react-leaflet'
 import 'leaflet/dist/leaflet.css'
+import MapCenter from './MapCenter';
 
 interface LayoutProps {
   title: string
@@ -31,13 +34,25 @@ export const DefaultFrame: FC<LayoutProps> = ({
   titleColor,
   subtitle,
   subtitleColor,
+  onMove
 }) => {
+  // const [map, setMap] = useState(null);
+
+  // const onMove = useCallback(() => {
+  //   console.log(map.getCenter());
+  // }, [map]);
+
+  //   map.on('move', onMove);
+
+  //   console.log(map, 'map')
+
   return (
     <div className="mask-w">
       <MapContainer
         zoom={13}
         center={[lat, lng]}
         scrollWheelZoom={false}
+        // ref={setMap}
         style={{
           height,
           // width,
@@ -64,14 +79,12 @@ export const DefaultFrame: FC<LayoutProps> = ({
             className="p-5 absolute inset-x-0 bottom-0 h-17"
           >
             <h1
-              style={{ fontFamily: 'Abril Fatface' }}
-              className={`${titleColor} text-4xl font-bold`}
+              className={`${titleColor} text-4xl font-bold text-rocksalt`}
             >
               {title}
             </h1>
             <span
-              style={{ fontFamily: 'Abril Fatface' }}
-              className={`${subtitleColor} text-black text-xl`}
+              className={`${subtitleColor} text-black text-xl text-homemade`}
             >
               {subtitle}
             </span>
@@ -91,6 +104,7 @@ export const DefaultFrame: FC<LayoutProps> = ({
     attribution='Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
     url={`https://api.mapbox.com/styles/v1/jbedo/cjria9ya35nzu2smgxatsz5fp.html?title=view&access_token=pk.eyJ1IjoiamJlZG8iLCJhIjoiY2lrYm50dWR4MG03cHZqa3BycXE1dmw4dyJ9.v6Mp7vCiYGVe49UFjooYtQ&zoomwheel=true&fresh=true#10/42.3624/-71.02`}
   /> */}
+        <MapCenter onMove={onMove} />
       </MapContainer>
     </div>
   )
@@ -128,25 +142,23 @@ export const CircleFrame: FC<LayoutProps> = ({
 
         <div
           style={{ zIndex: 999 }}
-          className="relative z-50 h-full w-full text-center "
+          className="relative z-50 h-full w-full text-center"
         >
           <div
             style={{
               zIndex: 200,
               background:
                 'linear-gradient(to bottom,rgba(255,255,255,0) 0,#fff 95%,#fff 50%)',
-            }}
+            }}fp
             className="p-5 absolute inset-x-0 bottom-0 h-17"
           >
             <h1
-              style={{ fontFamily: 'Abril Fatface' }}
-              className={`${titleColor} text-4xl font-bold`}
+              className={`${titleColor} text-4xl font-bold text-rocksalt`}
             >
               {title}
             </h1>
             <span
-              style={{ fontFamily: 'Abril Fatface' }}
-              className={`${subtitleColor} text-xl`}
+              className={`${subtitleColor} text-xl text-homemade`}
             >
               {subtitle}
             </span>

@@ -1,4 +1,5 @@
 import { FC, useEffect } from 'react'
+import { HeartIcon, LocationMarkerIcon } from '@heroicons/react/solid'
 import type { Product } from '@commerce/types/product'
 import { ProductOptions } from '@components/product'
 import usePrice from '@framework/product/use-price'
@@ -59,13 +60,13 @@ const productData = {
     {
       jd: 0,
       name: 'default',
-      preview: ''
+      preview: 'square.png',
     },
     {
       id: 1,
       name: 'circle',
-      preview: ''
-    }
+      preview: 'circle.png',
+    },
   ],
   colors: [
     {
@@ -75,7 +76,7 @@ const productData = {
       mapStyle: 'cjria9ya35nzu2smgxatsz5fp',
       mapPreview: 'map-style-black.png',
       titleColor: 'text-black-400',
-      subtitleColor: 'text-gray-400'
+      subtitleColor: 'text-gray-400',
     },
     {
       name: 'Black',
@@ -84,7 +85,7 @@ const productData = {
       mapStyle: 'cl2j6f9ae001014osfg024er5',
       mapPreview: 'map-style-blue.png',
       titleColor: 'text-blue-400',
-      subtitleColor: 'text-blue-200'
+      subtitleColor: 'text-blue-200',
     },
     {
       name: 'Heather Pink',
@@ -93,7 +94,7 @@ const productData = {
       mapStyle: 'cl28ypih6000215kuhwwmdvmc',
       mapPreview: 'map-style-pink.png',
       titleColor: 'text-pink',
-      subtitleColor: 'text-pink-light'
+      subtitleColor: 'text-pink-light',
 
       // theme: {
       //   mapStyle: '',
@@ -103,15 +104,50 @@ const productData = {
       // }
     },
 
-
     {
       name: 'Minimal',
+
+      // each layout will probably need its own color scheme/font change
+      // ex: default, square, little square, circle, heart
+      layout: {
+        default: {
+          bgColor: 'bg-gray-400',
+          mapStyle: 'cl2nmx5yh003d14n1rokqj5lf',
+          mapPreview: 'map-style-pink.png',
+          titleColor: 'text-black-400',
+          subtitleColor: 'text-gray-400',
+          titleFont: 'text-rocksalt',
+          subtitleFont: 'text-homemade',
+        },
+        circle: {
+          bgColor: 'bg-gray-400',
+          mapStyle: 'cl2nmx5yh003d14n1rokqj5lf',
+          mapPreview: 'map-style-pink.png',
+          titleColor: 'text-black-400',
+          subtitleColor: 'text-gray-400',
+        },
+      },
+
       bgColor: 'bg-gray-400',
       mapStyle: 'cl2nmx5yh003d14n1rokqj5lf',
       mapPreview: 'map-style-pink.png',
       titleColor: 'text-black-400',
-      subtitleColor: 'text-gray-400'
-    }
+      subtitleColor: 'text-gray-400',
+
+      titleFont: 'text-rocksalt',
+      subtitleFont: 'text-homemade',
+    },
+    {
+      name: 'Gold',
+      bgColor: 'bg-gray-400',
+      mapStyle: 'cl2nndegp001g14qos6kwbncd',
+      mapPreview: 'map-style-pink.png',
+      titleColor: 'text-black-400',
+      subtitleColor: 'text-gray-400',
+
+      titleFont: 'text-rocksalt',
+      subtitleFont: 'text-homemade',
+    },
   ],
   sizes: [
     { name: 'Small - 5in x 7in', inStock: true },
@@ -183,15 +219,17 @@ interface MapEditorProps {
 }
 
 const MapEditor: FC<MapEditorProps> = ({ product }) => {
+  const [center, setCenter] = useState([40.70345695121932, -74.00004777219424])
+  const [isMarkerEnabled, setMarkerEnabled] = useState(true);
   const [lat, setLat] = useState(40.70345695121932)
   const [lng, setLng] = useState(-74.00004777219424)
   const [title, setTitle] = useState('New York')
   const [subtitle, setSubtitle] = useState('United States')
   const [status, setStatus] = useState('')
   const [mapStyle, setMapStyle] = useState('cjria9ya35nzu2smgxatsz5fp')
-  const [frame, setFrameStyle] = useState(0);
-  const [titleColor, setTitleColor] = useState('');
-  const [subtitleColor, setSubtitleColor] = useState('');
+  const [frame, setFrameStyle] = useState(0)
+  const [titleColor, setTitleColor] = useState('')
+  const [subtitleColor, setSubtitleColor] = useState('')
 
   const addItem = useAddItem()
   const { openSidebar } = useUI()
@@ -262,11 +300,12 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
     currencyCode: product.price.currencyCode!,
   })
 
+  const onMove = (coords: any, zoom: any) => {
+    setCenter([coords.lat, coords.lng])
+  }
+
   return (
     <div className="bg-white">
-
-
-
       <div className="pt-6 pb-16 sm:pb-24">
         <nav
           aria-label="Breadcrumb"
@@ -364,8 +403,25 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
 
               <div>
                 <div className="art-collection m-5">
-                  <div className="art-frame vertical overflow-hidden">
+                  <div className="art-frame vertical overflow-hidden relative">
                     {/* change frame with border colors here */}
+                    {isMarkerEnabled && (
+                      <div className="marker-overlay absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-10">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          className="h-8 w-8 text-red"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                    )}
+
                     <MapView
                       title={title}
                       subtitle={subtitle}
@@ -377,6 +433,9 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                       layout={frame}
                       titleColor={titleColor}
                       subtitleColor={subtitleColor}
+                      onMove={onMove}
+                      // onMove={onMove}
+                      // eventually just pass in theme={theme} has all of the layouts
                     />
                   </div>
                 </div>
@@ -452,10 +511,65 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     }}
                   />
                   <span className="text-red">{placesError}</span>
-                  <a href="#" onClick={getUserLocation}>
-                    Current Location
+                  <a
+                    href="#"
+                    className="mt-4 text-gray-500"
+                    onClick={getUserLocation}
+                  >
+                    <LocationMarkerIcon className="h-6 w-6 text-red inline mr-2" />
+                    Use Current Location
                   </a>
                   {/* Might not need this anymore? - <GetLocationButton getUserLocation={getUserLocation} /> */}
+                </div>
+                <div className="product-sidebar__heading">
+                  <h2 className="text-lg font-bold text-gray-900">
+                    Place A Marker?
+                  </h2>
+                  <div className="mt-2 relative flex items-start">
+                    <div className="flex items-center h-5">
+                      <input
+                        id="comments"
+                        aria-describedby="comments-description"
+                        name="comments"
+                        type="checkbox"
+                        checked={isMarkerEnabled}
+                        onChange={(ev) => setMarkerEnabled(!isMarkerEnabled)}
+                        className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                      />
+                    </div>
+                    <div className="ml-3 text-sm">
+                      <label
+                        htmlFor="comments"
+                        className="font-medium text-gray-700"
+                      >
+                        Add map marker
+                      </label>
+                      <span id="comments-description" className="text-gray-500">
+                        <span className="sr-only">New comments </span> - mark a
+                        special place or event.
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="my-4">
+                  <button
+                    type="button"
+                    className="inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ring-2 ring-gray-200"
+                  >
+                    <HeartIcon
+                      className="h-6 w-6 text-red"
+                      aria-hidden="true"
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    className="mx-4 inline-flex items-center p-2 border border-transparent rounded-full shadow-sm text-white hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 ring-2 ring-gray-200"
+                  >
+                    <HeartIcon
+                      className="h-6 w-6 text-red"
+                      aria-hidden="true"
+                    />
+                  </button>
                 </div>
                 <div className="product-sidebar__heading">
                   <h2 className="text-lg font-bold text-gray-900">Map Style</h2>
@@ -472,7 +586,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   <RadioGroup
                     value={selectedColor}
                     onChange={(selected) => {
-                      console.log(selected);
+                      console.log(selected)
                       setFrameStyle(selected)
                     }}
                     className="mt-2"
@@ -490,7 +604,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                               // color.selectedColor,
                               active && checked ? 'ring ring-offset-1' : '',
                               !active && checked ? 'ring-2' : '',
-                              '-m-0.5 relative p-0.5 rounded-full flex items-center justify-center cursor-pointer focus:outline-none'
+                              '-m-0.5 relative p-0.5 flex items-center justify-center cursor-pointer focus:outline-none'
                             )
                           }
                         >
@@ -501,9 +615,10 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                             aria-hidden="true"
                             style={{
                               background: `url("/assets/${frame.preview}")`,
+                              backgroundSize: 'cover',
                             }}
                             className={classNames(
-                              'h-10 w-10 border border-black border-opacity-10 rounded-full'
+                              'h-10 w-10'
                             )}
                           />
                         </RadioGroup.Option>
@@ -522,9 +637,11 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                     value={selectedColor}
                     onChange={(selected) => {
                       setMapStyle(selected.mapStyle)
+                      setLat(center[0])
+                      setLng(center[1])
                       setSelectedColor(selected)
-                      setTitleColor(selected.titleColor);
-                      setSubtitleColor(selected.subtitleColor);
+                      setTitleColor(selected.titleColor)
+                      setSubtitleColor(selected.subtitleColor)
                     }}
                     className="mt-2"
                   >
@@ -563,15 +680,18 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                   </RadioGroup>
                 </div>
 
-
                 <div className="product-sidebar__heading">
-                  <h2 className="text-lg font-bold text-gray-900">Custom Text</h2>
+                  <h2 className="text-lg font-bold text-gray-900">
+                    Custom Text
+                  </h2>
                   <p className="text-gray-400">
                     Customize the print with your own text
                   </p>
                 </div>
                 <div className="my-7">
-                  <h2 className="text-sm font-medium text-gray-900">Big Text</h2>
+                  <h2 className="text-sm font-medium text-gray-900">
+                    Big Text
+                  </h2>
                   <input
                     type="text"
                     name="title"
