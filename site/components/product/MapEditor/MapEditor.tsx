@@ -673,8 +673,8 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                         <RadioGroup
                           value={selectedColor}
                           onChange={(selected) => {
-                            console.log(selected)
-                            setFrameStyle(selected)
+                            console.log(selected, 'frame selected')
+                            // setFrameStyle(selected.layout)
                           }}
                           className="mt-2"
                         >
