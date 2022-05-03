@@ -23,6 +23,7 @@ interface LayoutProps {
   lat: number
   lng: number
   layout: number
+  onMove?(coords: [number, number], zoom: number): any
 }
 
 export const DefaultFrame: FC<LayoutProps> = ({

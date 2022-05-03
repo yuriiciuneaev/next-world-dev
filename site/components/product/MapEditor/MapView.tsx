@@ -13,6 +13,7 @@ interface MapViewProps {
   layout: number
   titleColor: string
   subtitleColor: string
+  onMove?(coords: [number, number], zoom: number): any
 }
 
 const MapView: FC<MapViewProps> = (args) => {
