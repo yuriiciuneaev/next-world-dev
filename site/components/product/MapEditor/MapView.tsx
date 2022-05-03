@@ -1,4 +1,4 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import { DefaultFrame, CircleFrame } from './FrameLayout';
 
 interface MapViewProps {
@@ -16,6 +16,17 @@ interface MapViewProps {
 }
 
 const MapView: FC<MapViewProps> = (args) => {
+  useEffect(() => {
+    // window.scrollTo(0, 0)
+    if (
+      /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Windows Phone/i.test(
+        navigator.userAgent
+      )
+    ) {
+      document.getElementById('art-frame')?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }, [])
+
   const { layout } = args;
 
   switch (layout) {
