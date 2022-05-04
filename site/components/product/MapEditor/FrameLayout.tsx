@@ -80,7 +80,7 @@ export const DefaultFrame: FC<LayoutProps> = ({
             className="p-5 absolute inset-x-0 bottom-0 h-17"
           >
             <h1
-              className={`${titleColor} text-4xl font-bold text-rocksalt`}
+              className={`${titleColor} text-4xl font-bold text-homemade`}
             >
               {title}
             </h1>

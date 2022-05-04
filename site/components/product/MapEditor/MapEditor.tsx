@@ -483,57 +483,57 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
             <div className="product-sidebar lg:col-span-5">
               <Tab.Group as="div">
                 <div className="border-b border-gray-200">
-                  <Tab.List className="-mb-px flex space-x-4">
+                  <Tab.List className="-mb-px mt-4 flex space-x-4">
                     <Tab
                       className={({ selected }) =>
                         classNames(
                           selected
-                            ? 'border-indigo-600 text-indigo-600'
+                            ? 'border-gray-600 text-gray-800'
                             : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
-                          'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                          'whitespace-nowrap py-2 border-b-2 font-medium text-sm'
                         )
                       }
                     >
-                      <StarIcon className="h-6 w-6 text-red inline mr-2" />
+                      <StarIcon className="h-6 w-6 text-gray-500 inline mr-2" />
                       Location
                     </Tab>
                     <Tab
                       className={({ selected }) =>
                         classNames(
                           selected
-                            ? 'border-indigo-600 text-indigo-600'
+                            ? 'border-gray-600 text-gray-800'
                             : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
-                          'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                          'whitespace-nowrap py-2 border-b-2 font-medium text-sm'
                         )
                       }
                     >
-                      <PhotographIcon className="h-6 w-6 text-red inline mr-2" />
+                      <PhotographIcon className="h-6 w-6 text-gray-500 inline mr-2" />
                       Design
                     </Tab>
                     <Tab
                       className={({ selected }) =>
                         classNames(
                           selected
-                            ? 'border-indigo-600 text-indigo-600'
+                            ? 'border-gray-600 text-gray-800'
                             : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
-                          'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                          'whitespace-nowrap py-2 border-b-2 font-medium text-sm'
                         )
                       }
                     >
-                      <DocumentTextIcon className="h-6 w-6 text-red inline mr-2" />
+                      <DocumentTextIcon className="h-6 w-6 text-gray-500 inline mr-2" />
                       Text
                     </Tab>
                     <Tab
                       className={({ selected }) =>
                         classNames(
                           selected
-                            ? 'border-indigo-600 text-indigo-600'
+                            ? 'border-gray-800 text-gray-800'
                             : 'border-transparent text-gray-700 hover:text-gray-800 hover:border-gray-300',
-                          'whitespace-nowrap py-6 border-b-2 font-medium text-sm'
+                          'whitespace-nowrap py-2 border-b-2 font-medium text-sm'
                         )
                       }
                     >
-                      <DuplicateIcon className="h-6 w-6 text-red inline mr-2" />
+                      <DuplicateIcon className="h-6 w-6 text-gray-500 inline mr-2" />
                       Format
                     </Tab>
                   </Tab.List>
@@ -609,7 +609,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
                               onChange={(ev) =>
                                 setMarkerEnabled(!isMarkerEnabled)
                               }
-                              className="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                              className="focus:ring-gray-500 h-4 w-4 text-black border-gray-300 rounded"
                             />
                           </div>
                           <div className="ml-3 text-sm">
