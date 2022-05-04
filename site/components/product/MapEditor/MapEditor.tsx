@@ -483,7 +483,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
             <div className="product-sidebar lg:col-span-5">
               <Tab.Group as="div">
                 <div className="border-b border-gray-200">
-                  <Tab.List className="-mb-px flex space-x-8">
+                  <Tab.List className="-mb-px flex space-x-4">
                     <Tab
                       className={({ selected }) =>
                         classNames(

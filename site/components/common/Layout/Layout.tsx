@@ -381,7 +381,7 @@ const Layout: React.FC<Props> = ({
                 {/* Links */}
                 <Tab.Group as="div" className="mt-2">
                   <div className="border-b border-gray-200">
-                    <Tab.List className="-mb-px flex px-4 space-x-4">
+                    <Tab.List className="-mb-px flex px-4 space-x-8">
                       {navigation.categories.map((category) => (
                         <Tab
                           key={category.name}
