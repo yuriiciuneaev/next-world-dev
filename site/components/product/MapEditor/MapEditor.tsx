@@ -464,7 +464,7 @@ const MapEditor: FC<MapEditorProps> = ({ product }) => {
   const [placesError, setPlacesError] = useState('')
 
   const { price } = usePrice({
-    amount: product.price.value,
+    amount: variant.price,
     baseAmount: product.price.retailPrice,
     currencyCode: product.price.currencyCode!,
   })
